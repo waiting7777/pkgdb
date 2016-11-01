@@ -1,9 +1,16 @@
+var Pokemon = require('../lib/db');
 var express = require('express');
 var router = express.Router();
+const mongoose = require('mongoose');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+    Pokemon.find({}, { PokemonId : 1, NameEn : 1, NameTw : 1, Type1 : 1, Type2 : 1, MaxCp : 1, _id : 0}).sort({ PokemonId : 1 }).exec(function(err, pokemons){
+        if(err) throw err;
+
+        console.log(pokemons);
+        res.send(pokemons);
+    });
 });
 
 module.exports = router;
