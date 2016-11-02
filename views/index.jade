@@ -45,7 +45,9 @@ html
                                 td= pokemon.PokemonId
                                 td
                                     img(src="#{pokemon.img}")
-                                td= pokemon.NameEn
-                                td= pokemon.NameTw
+                                td
+                                    a(href="pokemon/#{pokemon.PokemonId}") #{pokemon.NameEn}
+                                td
+                                    a(href="pokemon/#{pokemon.PokemonId}") #{pokemon.NameTw}
                                 td= pokemon.type
                                 td= pokemon.MaxCp
