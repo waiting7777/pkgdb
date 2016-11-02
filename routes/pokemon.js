@@ -1,4 +1,5 @@
 var Pokemon = require('../lib/db_pokemon');
+var Evolution = require('../lib/db_evolution');
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
@@ -21,6 +22,9 @@ router.get('/:id', function(req, res, next) {
         res.render('pokemon', {pokemon : data[0]});
     });
 
+    Evolution.find({ Evolution : 5 }).exec(function(err, data){
+        console.log(data);
+    });
 
 });
 
