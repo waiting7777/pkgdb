@@ -40,7 +40,6 @@ router.get('/pokemon/:id', function(req, res, next) {
     else{
         Pokemon.find({ PokemonId : id }, { _id : 0, __v : 0 }).exec(function(err, data){
             res.send(data);
-            console.log(data);
         });
     }
 });

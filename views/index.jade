@@ -1,5 +1,51 @@
-extends layout
+html
+    head
+        meta(http-equiv="Content-Type", content="text/html", charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1, maximum-scale=1")
 
-block content
-  h1= title
-  p Welcome to #{title}
+        link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css")
+        link(rel="stylesheet", href="css/font-awesome.min.css")
+        link(rel="stylesheet", href="css/style.css")
+
+        script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
+        script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js")
+        script(src="js/jquery.tablesorter.min.js")
+        script(src="js/index.js")
+
+        title Pokemon Database
+
+    body
+        div.container
+            div.page-header
+                h1 Pokemon Go Database
+                h2.text-info 神奇寶貝資料庫
+            div.table-contain
+                table#pokemon-table.table.table-bordered.table-hover.table-striped
+                    thead
+                        tr
+                            th Pokemon Id
+                                i.fa.fa-caret-down
+                                i.fa.fa-caret-up
+                            th Pokemon
+                            th Name En
+                                i.fa.fa-caret-down
+                                i.fa.fa-caret-up
+                            th Name Tw
+                                i.fa.fa-caret-down
+                                i.fa.fa-caret-up
+                            th Type
+                                i.fa.fa-caret-down
+                                i.fa.fa-caret-up
+                            th Max Cp
+                                i.fa.fa-caret-down
+                                i.fa.fa-caret-up
+                    tbody
+                        for pokemon in pokemons
+                            tr
+                                td= pokemon.PokemonId
+                                td
+                                    img(src="#{pokemon.img}")
+                                td= pokemon.NameEn
+                                td= pokemon.NameTw
+                                td= pokemon.type
+                                td= pokemon.MaxCp

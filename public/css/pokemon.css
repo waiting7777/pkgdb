@@ -1,0 +1,445 @@
+
+#pokemon-img{
+    margin-top: 100px;
+}
+
+.table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td {
+    vertical-align: middle;
+}
+
+a:hover{
+    text-decoration: none;
+}
+
+#skill table td:nth-child(1){
+    width: 20%;
+}
+
+#skill table td:nth-child(2){
+    width: 25%;
+}
+
+#skill table td:nth-child(3){
+    width: 10%;
+}
+
+#skill table td:nth-child(4){
+    width: 10%;
+}
+
+#skill table td:nth-child(5){
+    width: 15%;
+}
+
+#skill table td:nth-child(6){
+    width: 20%;
+}
+
+.fa{
+    margin-right: 10px;
+    margin-left: 5px;
+}
+
+.normal-bg{
+    background-color: rgba(168,168,120,0.2);
+}
+
+.fighting-bg{
+    background-color: rgba(192,32,56,0.2);
+}
+
+.flying-bg{
+    background-color: rgba(168,144,240,0.2);
+}
+
+.poison-bg{
+    background-color: rgba(160,64,160,0.2);
+}
+
+.ground-bg{
+    background-color: rgba(224,192,104,0.2);
+}
+
+.rock-bg{
+    background-color: rgba(184,160,56,0.2);
+}
+
+.bug-bg{
+    background-color: rgba(168,184,32,0.2);
+}
+
+.ghost-bg{
+    background-color: rgba(112,88,152,0.2);
+}
+
+.steel-bg{
+    background-color: rgba(184,184,208,0.2);
+}
+
+.fire-bg{
+    background-color: rgba(240,128,80,0.2);
+}
+
+.water-bg{
+    background-color: rgba(104,144,240,0.2);
+}
+
+.grass-bg{
+    background-color: rgba(120,200,80,0.2);
+}
+
+.electric-bg{
+    background-color: rgba(248,208,48,0.2);
+}
+
+.psychic-bg{
+    background-color: rgba(248,88,136,0.2);
+}
+
+.ice-bg{
+    background-color: rgba(152,216,216,0.2);
+}
+
+.dragon-bg{
+    background-color: rgba(112,56,248,0.2);
+}
+
+.dark-bg{
+    background-color: rgba(112,88,72,0.2);
+}
+
+.fairy-bg{
+    background-color: rgba(238,153,172,0.2);
+}
+
+.grass-b{
+    color: #78C850;
+}
+
+.poison-b{
+    color: #A040A0;
+}
+
+.normal-b{
+    color: #A8A878;
+}
+
+.fighting-b{
+    color: #C02038;
+}
+
+.flying-b{
+    color: #A890F0;
+}
+
+.ground-b{
+    color: #E0C068;
+}
+
+.rock-b{
+    color: #B8A038;
+}
+
+.bug-b{
+    color: #A8B820;
+}
+
+.ghost-b{
+    color: #705898;
+}
+
+.steel-b{
+    color: #B8B8D0;
+}
+
+.fire-b{
+    color: #F08030;
+}
+
+.water-b{
+    color: #6890F0;
+}
+
+.electric-b{
+    color: #F8D030;
+}
+
+.psychic-b{
+    color: #F85888;
+}
+
+.ice-b{
+    color: #98D8D8;
+}
+
+.dragon-b{
+    color: #7038F8;
+}
+
+.dark-b{
+    color: #705848;
+}
+
+.fairy-b{
+    color: #EE99AC;
+}
+
+.grass{
+    background-color: #78C850;
+}
+
+.poison{
+    background-color: #A040A0;
+}
+
+.normal{
+    background-color: #A8A878;
+}
+
+.fighting{
+    background-color: #C02038;
+}
+
+.flying{
+    background-color: #A890F0;
+}
+
+.ground{
+    background-color: #E0C068;
+}
+
+.rock{
+    background-color: #B8A038;
+}
+
+.bug{
+    background-color: #A8B820;
+}
+
+.ghost{
+    background-color: #705898;
+}
+
+.steel{
+    background-color: #B8B8D0;
+}
+
+.fire{
+    background-color: #F08030;
+}
+
+.water{
+    background-color: #6890F0;
+}
+
+.electric{
+    background-color: #F8D030;
+}
+
+.psychic{
+    background-color: #F85888;
+}
+
+.ice{
+    background-color: #98D8D8;
+}
+
+.dragon{
+    background-color: #7038F8;
+}
+
+.dark{
+    background-color: #705848;
+}
+
+.fairy{
+    background-color: #EE99AC;
+}
+
+.stab{
+    background-color: #4caf50;
+}
+
+.legend-strong{
+    background-color: rgba(6,72,169,0.3);
+}
+
+.legend-weak{
+    background-color: rgba(205,35,37,0.3);
+}
+
+.strong{
+    color: #06628D;
+}
+
+.stronger{
+    color: #2aa7c9;
+}
+
+.weak{
+    color: #cd2325;
+}
+
+.weaker{
+    color: #a92024;
+}
+
+.legend{
+    width: 20px;
+    height: 10px;
+    margin-right: 10px;
+    margin-left: 5px;
+    display: inline-block;
+}
+
+#skill img{
+    margin-top: 7.5px;
+}
+
+.type {
+    width: 101.3px;
+    text-align: center;
+    line-height: 1.3;
+    display: inline-block;
+    color: #fff;
+    cursor: default;
+    border-radius: 3px;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    font-size: 18px;
+    padding: 5px 18px;
+    margin-right: 5px;
+}
+
+.type-min{
+    width: 76.05px;
+    text-align: center;
+    padding: 4px 9px;
+    line-height: 1.3;
+    display: inline-block;
+    color: #fff;
+    cursor: default;
+    border-radius: 3px;
+    text-shadow: 0 1px 1px rgba(0,0,0,0.5);
+    font-size: 16px;
+}
+
+#skill .type-min{
+    margin-right: 5px;
+}
+
+#main-type{
+    margin-top: 15px;
+}
+
+#type-chart{
+    margin-top: 30px;
+    text-align: center;
+}
+
+#type-chart td{
+    width: 16.6%;
+}
+
+#base td{
+    width: 50%;
+}
+
+del{
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+p{
+    font-size: 16px;
+    margin: 0 0 20px;
+
+}
+
+p{
+    margin-left: 5px;
+}
+
+.panel-orange{
+    border-color: #f9cda9;
+}
+
+.panel-orange>.panel-heading {
+    color: #e6700f;
+    background-color: #fad3b2;
+    border-color: #f9cda9;
+}
+
+.table{
+    margin-top: 5px;
+}
+
+.mb-5{
+    margin-bottom: 5px;
+}
+
+#base .table>tbody>tr:nth-child(1)>td{
+    border-top: 0px;
+}
+
+#base .table>tbody>tr>td:nth-child(1){
+    border-right: 1px solid #ddd;
+}
+
+#recommand td{
+    width: 50%;
+}
+
+#recommand .table>tbody>tr:nth-child(1)>td{
+    border-top: 0px;
+}
+
+#recommand .table>tbody>tr>td:nth-child(1){
+    border-right: 1px solid #ddd;
+}
+
+#recommand .table>tbody>tr>td:nth-child(2){
+    text-align: center;
+}
+
+#evo img{
+    width: 100px;
+}
+
+#evo table{
+    margin: 0 auto;
+}
+
+#evo .arrow-contain{
+    position: relative;
+}
+
+#evo .candy{
+    font-size: 13px;
+    position: absolute;
+    top: -14px;
+    left: 23px;
+}
+
+#evo .fa-long-arrow-right{
+    font-size: 45px;
+    vertical-align: middle;
+    margin: 0 15px;
+}
+
+.sub-title{
+    color: #777;
+    font-size: 24px;
+    font-style: oblique;
+}
+
+.blur{
+    opacity: 0.4;
+}
+
+.gray{
+    color: #777;
+}
+
+hr{
+    border-top-width: 2px;
+}
