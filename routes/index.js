@@ -1,7 +1,8 @@
-var Pokemon = require('../lib/db');
+var Pokemon = require('../lib/db_pokemon');
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/pokemon');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,7 +10,6 @@ router.get('/', function(req, res, next) {
         if(err) throw err;
 
         for(var i in pokemons){
-            pokemons[i]['img'] = 'image/pokemon/' + pokemons[i]['PokemonId'] + '.png';
             pokemons[i]['type'] = pokemons[i]['Type1'] + ' ' + pokemons[i]['Type2'];
         }
 

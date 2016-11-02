@@ -1,4 +1,4 @@
-var Pokemon = require('../lib/db');
+var Pokemon = require('../lib/db_pokemon');
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
