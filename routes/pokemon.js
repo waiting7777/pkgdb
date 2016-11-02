@@ -17,7 +17,7 @@ router.get('/:id', function(req, res, next) {
     }
 
     Pokemon.find({ PokemonId : id }, { _id : 0, __v : 0 }).exec(function(err, data){
-        console.log(data[0]['NameEn']);
+        console.log(data[0]);
         res.render('pokemon', {pokemon : data[0]});
     });
 

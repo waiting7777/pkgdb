@@ -19,3 +19,14 @@ html
                 h2 #{pokemon.NameTw}
                 div.sub-title #{pokemon.NameEn}
             hr
+            div.row
+                div.col-md-6
+                    div.panel.panel-success#info
+                        div.panel-heading
+                            i.fa.fa-comment
+                            關於
+                        div.panel-body
+                            p #{pokemon.Flavor}
+                            blockquote.blockquote-reverse
+                                a(target="_blank" href="https://wiki.52poke.com/wiki/")
+                                    i 神奇寶貝百科
