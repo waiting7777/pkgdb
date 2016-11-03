@@ -30,7 +30,7 @@ html
                             blockquote.blockquote-reverse
                                 a(target="_blank" href="https://wiki.52poke.com/wiki/")
                                     i 神奇寶貝百科
-                    div.panel.panel-organge#evo
+                    div.panel.panel-orange#evo
                         div.panel-heading
                             i.fa.fa-location-arrow
                             進化
@@ -38,9 +38,7 @@ html
                             table
                                 tr
                                     td
-                                        img(src="../image/pokemon_big/#{pokemon.PokemonId}.png")
-                                        span.arrow-contain.gray
-                                            span.candy 25
-                                            i.fa.fa-long-arrow-right
-                                        a(href="2")
-                                            img.blur(src="../image/pokemon_big/3.png")
+                                        if evolution.length == 0
+                                            123
+                                        else
+                                            456
