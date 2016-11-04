@@ -10,36 +10,36 @@ html
         script(src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js")
         script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js")
 
-        title #{pokemon.NameEn}
+        title #{pokemon['NameEn']}
 
     body
         div.container#pokemon-data
             div#pokemon-img
-                img(src="../image/pokemon_big/#{pokemon.PokemonId}.png")
-                h2 #{pokemon.NameTw}
-                div.sub-title #{pokemon.NameEn}
+                img(src="../image/pokemon_big/#{pokemon['PokemonId']}.png")
+                h2 #{pokemon['NameTw']}
+                div.sub-title #{pokemon['NameEn']}
             hr
             div.row
                 div.col-md-6
                     div.panel.panel-success#info
                         div.panel-heading
                             i.fa.fa-comment
-                            關於
+                            span 關於
                         div.panel-body
-                            p #{pokemon.Flavor}
+                            p #{pokemon['Flavor']}
                             blockquote.blockquote-reverse
                                 a(target="_blank" href="https://wiki.52poke.com/wiki/")
                                     i 神奇寶貝百科
                     div.panel.panel-orange#evo
                         div.panel-heading
                             i.fa.fa-location-arrow
-                            進化
+                            span 進化
                         div.panel-body
                             table
                                 tr
                                     td
                                         if evolution.length == 0
-                                            img(src="../image/pokemon_big/#{pokemon.PokemonId}.png")
+                                            img(src="../image/pokemon_big/#{pokemon['PokemonId']}.png")
                                         else
                                             - for(i=0;i<evolution['Evolution'].length;i++)
                                                 a(href="#{evolution['Evolution'][i]}")
@@ -48,3 +48,13 @@ html
                                                     span.arrow-contain.gray
                                                         span.candy= evolution['Candy'][i]
                                                         i.fa.fa-long-arrow-right
+                    div.panel.panel-default
+                        div.panel-heading
+                            i.fa.fa-shield
+                            sapn 屬性
+                        div.panel-body
+                            table#main-type(align="center")
+                                td
+                                    span(class="type #{pokemon['Type1']}") #{pokemon['Type1']}
+                                    if(pokemon['Type2'] !== '')
+                                        span(class="type #{pokemon['Type2']}") #{pokemon['Type2']}
