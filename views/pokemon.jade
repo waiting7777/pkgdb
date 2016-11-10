@@ -59,7 +59,27 @@ html
                                     if(pokemon['Type2'] !== '')
                                         span(class="type #{pokemon['Type2']}") #{pokemon['Type2']}
                             table.table.table-bordered#type-chart
-                                -for(i=0;i<18;i++)
-                                    if(i %3 == 0)
-                                        tr
-                                    td= i
+                                -for(i=0;i<6;i++)
+                                    tr
+                                        -for(j=0;j<3;j++)
+                                            td
+                                                span(class="type-min #{type_map[i*3+j]}") #{type_map[i*3+j]}
+                                            case types[i][j]
+                                                when -2
+                                                    td.stronger
+                                                        span.blue 0.64x
+                                                when -1
+                                                    td.strong 0.8x
+                                                when 0
+                                                    td -
+                                                when 1
+                                                    td.weak 1.25x
+                                                when 2
+                                                    td.weaker
+                                                        span.red 1.56x
+                            div.explan
+                                span.legend.legend-strong
+                                承受較少的傷害
+                            div.explan
+                                span.legend.legend-weak
+                                承受較多的傷害
