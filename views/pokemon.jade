@@ -58,3 +58,8 @@ html
                                     span(class="type #{pokemon['Type1']}") #{pokemon['Type1']}
                                     if(pokemon['Type2'] !== '')
                                         span(class="type #{pokemon['Type2']}") #{pokemon['Type2']}
+                            table.table.table-bordered#type-chart
+                                -for(i=0;i<18;i++)
+                                    if(i %3 == 0)
+                                        tr
+                                    td= i

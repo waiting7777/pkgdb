@@ -1,5 +1,6 @@
 var Pokemon = require('../lib/db_pokemon');
 var Evolution = require('../lib/db_evolution');
+var common = require('../lib/common');
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
@@ -11,16 +12,15 @@ router.get('/:id', function(req, res, next) {
 
     var temp = [];
 
-    if(isNaN(req.params.id)){
-        res.send('Can\'t varify string');
+    if(common.idCheck(req.params.id, 151) == false){
+        res.render('error', {
+            message: 'ERROR',
+            error: 'ERROR'
+        });
         return;
     }
-    var id = parseInt(req.params.id);
 
-    if(id < 0 || id > 151){
-        res.send('Can\'t find pokemon');
-        return;
-    }
+    var id = parseInt(req.params.id);
 
     Pokemon.find({ PokemonId : id }, { _id : 0, __v : 0 }).exec()
     .then(function(pokemon){
