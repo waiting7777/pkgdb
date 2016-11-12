@@ -30,24 +30,6 @@ html
                             blockquote.blockquote-reverse
                                 a(target="_blank" href="https://wiki.52poke.com/wiki/")
                                     i 神奇寶貝百科
-                    div.panel.panel-orange#evo
-                        div.panel-heading
-                            i.fa.fa-location-arrow
-                            span 進化
-                        div.panel-body
-                            table
-                                tr
-                                    td
-                                        if evolution.length == 0
-                                            img(src="../image/pokemon_big/#{pokemon['PokemonId']}.png")
-                                        else
-                                            - for(i=0;i<evolution['Evolution'].length;i++)
-                                                a(href="#{evolution['Evolution'][i]}")
-                                                    img(src="../image/pokemon_big/#{evolution['Evolution'][i]}.png")
-                                                if(typeof(evolution['Candy'][i]) !== 'undefined')
-                                                    span.arrow-contain.gray
-                                                        span.candy= evolution['Candy'][i]
-                                                        i.fa.fa-long-arrow-right
                     div.panel.panel-default
                         div.panel-heading
                             i.fa.fa-shield
@@ -79,7 +61,136 @@ html
                                                         span.red 1.56x
                             div.explan
                                 span.legend.legend-strong
-                                承受較少的傷害
+                                span 承受較少的傷害
                             div.explan
                                 span.legend.legend-weak
-                                承受較多的傷害
+                                span 承受較多的傷害
+                div.col-md-6
+                    div#base.panel.panel-info
+                        div.panel-heading
+                            i.fa.fa-bar-chart
+                            sapn 基礎數值
+                        div.panel-body
+                            table.table
+                                tr
+                                    td 攻擊力
+                                    td #{pokemon['BaseAtk']}
+                                tr
+                                    td 防禦力
+                                    td #{pokemon['BaseDef']}
+                                tr
+                                    td 耐力
+                                    td #{pokemon['BaseSta']}
+                            table.table
+                                tr
+                                    td 身高
+                                    td= pokemon['Height'].toFixed(2)
+                                        span  m
+                                tr
+                                    td 體重
+                                    td= pokemon['Weight'].toFixed(2)
+                                        span  kg
+                            table.table
+                                tr
+                                    td 捕獲率
+                                    td #{pokemon['CaptureRate']} %
+                                tr
+                                    td 逃跑率
+                                    td #{pokemon['FleeRate']} %
+                    div.panel.panel-orange#evo
+                        div.panel-heading
+                            i.fa.fa-location-arrow
+                            span 進化
+                        div.panel-body
+                            table
+                                tr
+                                    td
+                                        if evolution.length == 0
+                                            img(src="../image/pokemon_big/#{pokemon['PokemonId']}.png")
+                                        else
+                                            - for(i=0;i<evolution['Evolution'].length;i++)
+                                                a(href="#{evolution['Evolution'][i]}")
+                                                    img(src="../image/pokemon_big/#{evolution['Evolution'][i]}.png")
+                                                if(typeof(evolution['Candy'][i]) !== 'undefined')
+                                                    span.arrow-contain.gray
+                                                        span.candy= evolution['Candy'][i]
+                                                        i.fa.fa-long-arrow-right
+                div.col-md-12
+                    div.panel.panel-danger#skill
+                        div.panel-heading
+                            i.fa.fa-flash
+                            span 所有技能
+                        div.panel-body
+                            p.gray 快速技能
+                            table.table
+                                thead
+                                    th 名稱
+                                    th 屬性
+                                    th 傷害
+                                    th CD
+                                    th DPS
+                                    th EPS
+                                - for(var i = 0; i < quick.length; i++)
+                                    tr(class="#{quick[i]['Type']}-bg")
+                                        td #{quick[i]['NameTw']}<br/>#{quick[i]['NameEn']}
+                                        - if(quick[i]['Type'] == pokemon['Type1'] || quick[i]['Type'] == pokemon['Type2'])
+                                            td
+                                                span(class="type-min #{quick[i]['Type']}") #{quick[i]['Type']}
+                                                span.type-min.stab STAB
+                                            td
+                                                del.gray #{quick[i]['Damage']}
+                                                span(class="#{quick[i]['Type']}-b")
+                                                    b
+                                                        span #{quick[i]['Damage_STAB']}
+                                                        i.fa.fa-level-up
+                                            td #{quick[i]['ColdDown']}
+                                            td
+                                                del.gray #{quick[i]['DPS']}
+                                                span(class="#{quick[i]['Type']}-b")
+                                                    b
+                                                        span #{quick[i]['DPS_STAB']}
+                                                        i.fa.fa-level-up
+                                        - else
+                                            td
+                                                span(class="type-min #{quick[i]['Type']}") #{quick[i]['Type']}
+                                            td #{quick[i]['Damage']}
+                                            td #{quick[i]['ColdDown']}
+                                            td #{quick[i]['DPS']}
+                                        td #{quick[i]['EPS']}
+                            p.gray 主要技能
+                            table.table(align="center")
+                                thead
+                                    th 名稱
+                                    th 屬性
+                                    th 傷害
+                                    th CD
+                                    th DPS
+                                    th 能量
+                                - for(var i = 0; i < charge.length; i++)
+                                    tr(class="#{charge[i]['Type']}-bg")
+                                        td #{charge[i]['NameTw']}<br/>#{charge[i]['NameEn']}
+                                        - if(charge[i]['Type'] == pokemon['Type1'] || charge[i]['Type'] == pokemon['Type2'])
+                                            td
+                                                span(class="type-min #{charge[i]['Type']}") #{charge[i]['Type']}
+                                                span.type-min.stab STAB
+                                            td
+                                                del.gray #{charge[i]['Damage']}
+                                                span(class="#{charge[i]['Type']}-b")
+                                                    b
+                                                        span #{charge[i]['Damage_STAB']}
+                                                        i.fa.fa-level-up
+                                            td #{charge[i]['ColdDown']}
+                                            td
+                                                del.gray #{charge[i]['DPS']}
+                                                span(class="#{charge[i]['Type']}-b")
+                                                    b
+                                                        span #{charge[i]['DPS_STAB']}
+                                                        i.fa.fa-level-up
+                                        - else
+                                            td
+                                                span(class="type-min #{quick[i]['Type']}") #{quick[i]['Type']}
+                                            td #{charge[i]['Damage']}
+                                            td #{charge[i]['ColdDown']}
+                                            td #{quick[i]['DPS']}
+                                        td
+                                            img(src="../image/energy/energy#{charge[i]['Charge']}.png")
