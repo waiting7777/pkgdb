@@ -23,12 +23,12 @@ html
                 - if(pokemon['PokemonId'] != 1)
                     a(href="#{pokemon['PokemonId']-1}")
                         div#prev.link-card
-                            span Prev
+                            span ##{pokemon['PokemonId']-1} #{prev}
                             img(src="../image/pokemon_big/#{pokemon['PokemonId']-1}.png")
                 - if(pokemon['PokemonId'] != 151)
                     a(href="#{pokemon['PokemonId']+1}")
                         div#next.link-card
-                            span Next
+                            span ##{pokemon['PokemonId']+1} #{next}
                             img(src="../image/pokemon_big/#{pokemon['PokemonId']+1}.png")
             hr
             div.row
@@ -199,9 +199,9 @@ html
                                                         i.fa.fa-level-up
                                         - else
                                             td
-                                                span(class="type-min #{quick[i]['Type']}") #{quick[i]['Type']}
+                                                span(class="type-min #{charge[i]['Type']}") #{charge[i]['Type']}
                                             td #{charge[i]['Damage']}
                                             td #{charge[i]['ColdDown']}
-                                            td #{quick[i]['DPS']}
+                                            td #{charge[i]['DPS']}
                                         td
                                             img(src="../image/energy/energy#{charge[i]['Charge']}.png")

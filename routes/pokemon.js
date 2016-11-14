@@ -32,10 +32,21 @@ router.get('/:id', function(req, res, next) {
 
     var id = parseInt(req.params.id);
 
-    Pokemon.find({ PokemonId : id }, { _id : 0, __v : 0 }).exec()
+    Pokemon.find({ PokemonId : {$in : [id-1, id, id+1]} }, { _id : 0, __v : 0 }).exec()
     .then(function(pokemon){
-
-        temp['pokemon'] = pokemon[0];
+        if(id == 1){
+            temp['pokemon'] = pokemon[0];
+            temp['next'] = pokemon[1]['NameTw'];
+        }
+        else if(id == 151){
+            temp['pokemon'] = pokemon[1];
+            temp['prev'] = pokemon[0]['NameTw'];
+        }
+        else{
+            temp['pokemon'] = pokemon[1];
+            temp['prev'] = pokemon[0]['NameTw'];
+            temp['next'] = pokemon[2]['NameTw'];
+        }
 
         return Evolution.find({ Evolution : temp['pokemon']['PokemonId']}, { __v : 0, _id : 0 });
     })
