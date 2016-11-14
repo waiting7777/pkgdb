@@ -13,7 +13,7 @@ html
         title #{pokemon['NameEn']}
 
     body
-        include head
+        include headbar
         div.container#pokemon-data
             div#pokemon-img
                 img(src="../image/pokemon_big/#{pokemon['PokemonId']}.png")
@@ -23,12 +23,12 @@ html
                 - if(pokemon['PokemonId'] != 1)
                     a(href="#{pokemon['PokemonId']-1}")
                         div#prev.link-card
-                            span #{prev}
+                            span Prev
                             img(src="../image/pokemon_big/#{pokemon['PokemonId']-1}.png")
                 - if(pokemon['PokemonId'] != 151)
                     a(href="#{pokemon['PokemonId']+1}")
                         div#next.link-card
-                            span #{next}
+                            span Next
                             img(src="../image/pokemon_big/#{pokemon['PokemonId']+1}.png")
             hr
             div.row
