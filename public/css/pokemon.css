@@ -448,4 +448,46 @@ p{
 
 hr{
     border-top-width: 2px;
+    clear: both;
+}
+
+#link-contain{
+    margin-top: 20px;
+    height: 60px;
+}
+
+#link-contain img{
+    width: 40px;
+    height: 37.14px;
+}
+
+#link-contain span{
+    margin-left: 15px;
+}
+
+#next img{
+    float: right;
+}
+
+#prev img{
+    float: left;
+}
+
+.link-card{
+    line-height: 40px;
+    height: 60px;
+    width: 150px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+    padding: 10px;
+}
+
+#prev{
+    float: left;
+}
+
+#next{
+    float:right;
 }

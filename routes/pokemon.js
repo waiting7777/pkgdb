@@ -32,9 +32,26 @@ router.get('/:id', function(req, res, next) {
 
     var id = parseInt(req.params.id);
 
-    Pokemon.find({ PokemonId : id }, { _id : 0, __v : 0 }).exec()
+    Pokemon.find({ PokemonId : { $in : [id - 1, id, id + 1] } }, { _id : 0, __v : 0 }).exec()
     .then(function(pokemon){
-        temp['pokemon'] = pokemon[0];
+        console.log(pokemon);
+        console.log('######');
+        console.log(id);
+        if(id == 1){
+            temp['pokemon'] = pokemon[0];
+            temp['next'] = pokemon[2]['NameTw'];
+        }
+        else if(id == 151){
+            temp['pokemon'] = pokemon[1]
+            temp['prev'] = pokemon[0]['NameTw'];
+        }
+        else{
+            temp['pokemon'] = pokemon[1];
+            temp['prev'] = pokemon[0]['NameTw'];
+            temp['next'] = pokemon[2]['NameTw'];
+        }
+        console.log('===================');
+        console.log(temp);
         return Evolution.find({ Evolution : pokemon[0]['PokemonId']}, { __v : 0, _id : 0 });
     })
     .then(function(evolution){
@@ -59,7 +76,6 @@ router.get('/:id', function(req, res, next) {
         for(var i=0;i < type[0]['Relate'].length;i+=3){
             temp_type_s.push(temp_type.slice(i, i+3))
         }
-        console.log(temp);
         return QuickMoveRelate.find({ PokemonId : temp['pokemon']['PokemonId']}, { _id : 0, __v : 0 });
 
     })
@@ -84,8 +100,8 @@ router.get('/:id', function(req, res, next) {
     })
     .then(function(chargemove){
         temp['charge'] = chargemove;
-        console.log(temp);
-        res.render('pokemon', {pokemon : temp['pokemon'], evolution : temp['evolution'], types : temp_type_s, type_map : type_map, quick : temp['quick'], charge : temp['charge']});
+        // console.log(temp);
+        res.render('pokemon', {pokemon : temp['pokemon'], evolution : temp['evolution'], types : temp_type_s, type_map : type_map, quick : temp['quick'], charge : temp['charge'], prev : temp['prev'], next : temp['next']});
     });
 });
 

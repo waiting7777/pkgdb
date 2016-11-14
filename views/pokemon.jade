@@ -13,12 +13,23 @@ html
         title #{pokemon['NameEn']}
 
     body
-        include head 
+        include head
         div.container#pokemon-data
             div#pokemon-img
                 img(src="../image/pokemon_big/#{pokemon['PokemonId']}.png")
                 h2 #{pokemon['NameTw']}
                 div.sub-title #{pokemon['NameEn']}
+            div#link-contain
+                - if(pokemon['PokemonId'] != 1)
+                    a(href="#{pokemon['PokemonId']-1}")
+                        div#prev.link-card
+                            span #{prev}
+                            img(src="../image/pokemon_big/#{pokemon['PokemonId']-1}.png")
+                - if(pokemon['PokemonId'] != 151)
+                    a(href="#{pokemon['PokemonId']+1}")
+                        div#next.link-card
+                            span #{next}
+                            img(src="../image/pokemon_big/#{pokemon['PokemonId']+1}.png")
             hr
             div.row
                 div.col-md-6
