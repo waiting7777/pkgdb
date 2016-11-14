@@ -11,12 +11,16 @@ a:hover{
     text-decoration: none;
 }
 
+#skill table td, #skill table th{
+    text-align: center;
+}
+
 #skill table td:nth-child(1){
-    width: 20%;
+    width: 30%;
 }
 
 #skill table td:nth-child(2){
-    width: 25%;
+    width: 20%;
 }
 
 #skill table td:nth-child(3){
@@ -32,7 +36,7 @@ a:hover{
 }
 
 #skill table td:nth-child(6){
-    width: 20%;
+    width: 15%;
 }
 
 .fa{
@@ -258,6 +262,7 @@ a:hover{
 
 .stab{
     background-color: #4caf50;
+    margin-top: 5px;
 }
 
 .legend-strong{
@@ -294,6 +299,7 @@ a:hover{
 
 #skill img{
     margin-top: 7.5px;
+    width: 100%;
 }
 
 .type {

@@ -13,6 +13,7 @@ html
         title #{pokemon['NameEn']}
 
     body
+        include head 
         div.container#pokemon-data
             div#pokemon-img
                 img(src="../image/pokemon_big/#{pokemon['PokemonId']}.png")
@@ -30,6 +31,24 @@ html
                             blockquote.blockquote-reverse
                                 a(target="_blank" href="https://wiki.52poke.com/wiki/")
                                     i 神奇寶貝百科
+                    div.panel.panel-orange#evo
+                        div.panel-heading
+                            i.fa.fa-location-arrow
+                            span 進化
+                        div.panel-body
+                            table
+                                tr
+                                    td
+                                        if evolution.length == 0
+                                            img(src="../image/pokemon_big/#{pokemon['PokemonId']}.png")
+                                        else
+                                            - for(i=0;i<evolution['Evolution'].length;i++)
+                                                a(href="#{evolution['Evolution'][i]}")
+                                                    img(src="../image/pokemon_big/#{evolution['Evolution'][i]}.png")
+                                                if(typeof(evolution['Candy'][i]) !== 'undefined')
+                                                    span.arrow-contain.gray
+                                                        span.candy= evolution['Candy'][i]
+                                                        i.fa.fa-long-arrow-right
                     div.panel.panel-default
                         div.panel-heading
                             i.fa.fa-shield
@@ -97,25 +116,6 @@ html
                                 tr
                                     td 逃跑率
                                     td #{pokemon['FleeRate']} %
-                    div.panel.panel-orange#evo
-                        div.panel-heading
-                            i.fa.fa-location-arrow
-                            span 進化
-                        div.panel-body
-                            table
-                                tr
-                                    td
-                                        if evolution.length == 0
-                                            img(src="../image/pokemon_big/#{pokemon['PokemonId']}.png")
-                                        else
-                                            - for(i=0;i<evolution['Evolution'].length;i++)
-                                                a(href="#{evolution['Evolution'][i]}")
-                                                    img(src="../image/pokemon_big/#{evolution['Evolution'][i]}.png")
-                                                if(typeof(evolution['Candy'][i]) !== 'undefined')
-                                                    span.arrow-contain.gray
-                                                        span.candy= evolution['Candy'][i]
-                                                        i.fa.fa-long-arrow-right
-                div.col-md-12
                     div.panel.panel-danger#skill
                         div.panel-heading
                             i.fa.fa-flash
