@@ -28,7 +28,7 @@ html
                                 i.fa.fa-caret-down
                                 i.fa.fa-caret-up
                             th Pokemon
-                            th Name En
+                            th.hidden-xs Name En
                                 i.fa.fa-caret-down
                                 i.fa.fa-caret-up
                             th Name Tw
@@ -46,7 +46,7 @@ html
                                 td= pokemon.PokemonId
                                 td
                                     img(src="image/pokemon/#{pokemon.PokemonId}.png")
-                                td
+                                td.hidden-xs
                                     a(href="pokemon/#{pokemon.PokemonId}") #{pokemon.NameEn}
                                 td
                                     a(href="pokemon/#{pokemon.PokemonId}") #{pokemon.NameTw}
