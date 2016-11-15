@@ -491,3 +491,42 @@ hr{
 #next{
     float:right;
 }
+
+@media screen and (max-width: 500px){
+    #evo img{
+        width: 20%;
+    }
+    #evo .candy{
+        left: 18px;
+    }
+    #evo .fa-long-arrow-right{
+        font-size: 30px;
+    }
+    #type .panel-body{
+        padding: 15px 5px;
+    }
+    .type-min {
+        width: 48.05px;
+        padding: 4px 1px;
+        font-size: 13px;
+    }
+    del{
+        display: none;
+    }
+    #skill .panel-body{
+        padding: 15px 5px;
+    }
+}
+
+@media screen and (min-width : 501px) and (max-width : 1280px){
+    #evo img{
+        width: 85px;
+    }
+    .type-min {
+        width: 64.05px;
+        font-size: 14px;
+    }
+    del{
+        display: none;
+    }
+}
