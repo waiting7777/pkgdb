@@ -9,6 +9,7 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var pokemons = require('./routes/pokemon');
 var apis = require('./routes/api');
+var caculator = require('./routes/caculator');
 
 
 var app = express();
@@ -29,6 +30,7 @@ app.use('/', routes);
 app.use('/users', users);
 app.use('/api', apis);
 app.use('/pokemon', pokemons);
+app.use('/caculator', caculator);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

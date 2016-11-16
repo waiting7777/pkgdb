@@ -1,0 +1,74 @@
+<html>
+    <head>
+
+        <script type="text/javascript" src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+
+        <style>
+            #caculator{
+                width: 800px;
+                margin : 0 auto;
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+        <div class="container">
+            <div class="row" id="caculator">
+                <div class="col-md-4">
+                    <i class="fa fa-heart"></i> HP
+                    <div class="inp-contain">
+                        <input type="text" v-model="hp">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <i class="fa fa-flash"></i> ATK
+                    <div class="inp-contain">
+                        <input type="text" v-model="atk">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <i class="fa fa-shield"></i> DEF
+                    <div class="inp-contain">
+                        <input type="text" v-model="def">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div id="total">
+                        Total = {{ total }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+
+            var VM = new Vue({
+                el : '#caculator',
+                data : {
+                    hp : '',
+                    atk : '',
+                    def : '',
+                    total : 5
+                },
+                created : function(){
+                    
+                },
+                computed : {
+                    total : function(){
+                        return parseInt(this.hp) + parseInt(this.atk) + parseInt(this.def);
+                    }
+                }
+            })
+
+        </script>
+
+
+    </body>
+
+</html>

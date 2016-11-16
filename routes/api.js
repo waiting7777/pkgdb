@@ -1,5 +1,6 @@
 var Pokemon = require('../lib/db_pokemon');
 var Evolution = require('../lib/db_evolution');
+var Cpm = require('../lib/db_cpm');
 var express = require('express');
 var router = express.Router();
 const mongoose = require('mongoose');
@@ -71,6 +72,28 @@ router.get('/evolution/:id', function(req, res, next) {
             res.send(data)
         });
     }
+});
+
+router.get('/cpm', function(req, res, next){
+    Cpm.find({}, { _id : 0, __v : 0}).exec(function(err, cpm){
+        if(err) throw err;
+
+        res.send(cpm);
+        return;
+    });
+});
+
+router.get('/cpm/:level', function(req, res, next){
+    if(isNaN(req.params.level)){
+        res.send(' ');
+        return;
+    }
+    Cpm.find({ Level : req.params.level }, { _id : 0, __v : 0}).exec(function(err, cpm){
+        if(err) throw err;
+
+        res.send(cpm);
+        return;
+    });
 });
 
 module.exports = router;
