@@ -12,7 +12,7 @@ router.get('/', function(req, res, next){
 
 router.get('/pokemon', function(req, res, next) {
 
-    Pokemon.find({}, { PokemonId : 1, NameEn : 1, NameTw : 1, Type1 : 1, Type2 : 1, MaxCp : 1, _id : 0}).sort({ PokemonId : 1 }).exec(function(err, pokemons){
+    Pokemon.find({}, { PokemonId : 1, NameEn : 1, NameTw : 1, Type1 : 1, Type2 : 1, MaxCp : 1, BaseAtk : 1, BaseDef : 1, BaseSta : 1, _id : 0}).sort({ PokemonId : 1 }).exec(function(err, pokemons){
         if(err) throw err;
 
         console.log(pokemons);
@@ -33,7 +33,7 @@ router.get('/pokemon/:id', function(req, res, next) {
     var id = parseInt(req.params.id);
 
     if(id == 0){
-        Pokemon.find({}, { PokemonId : 1, NameEn : 1, NameTw : 1, Type1 : 1, Type2 : 1, MaxCp : 1, _id : 0}).sort({ PokemonId : 1 }).exec(function(err, pokemons){
+        Pokemon.find({}, { PokemonId : 1, NameEn : 1, NameTw : 1, Type1 : 1, Type2 : 1, MaxCp : 1, BaseAtk : 1, BaseDef : 1, BaseSta : 1, _id : 0}).sort({ PokemonId : 1 }).exec(function(err, pokemons){
             if(err) throw err;
 
             res.send(pokemons);

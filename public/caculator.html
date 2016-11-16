@@ -1,6 +1,8 @@
 <html>
     <head>
 
+        <title>CP Caulator</title>
+
         <script type="text/javascript" src="https://unpkg.com/vue@latest/dist/vue.js"></script>
         <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
 
@@ -12,6 +14,29 @@
                 width: 800px;
                 margin : 0 auto;
             }
+            body, #result{
+                margin-top: 60px;
+            }
+            #select, #level{
+                margin-bottom: 60px;
+            }
+            .sub-title{
+                color : #777;
+            }
+            select{
+                width: 174px;
+                height: 26px;
+                margin-top: 5px;
+            }
+            .title{
+                margin-bottom : 10px;
+            }
+            button{
+                margin-top: 32px;
+            }
+            .red{
+                color : red;
+            }
 
         </style>
 
@@ -19,7 +44,24 @@
 
     <body>
         <div class="container">
+            <div class="page-header">
+                <h1>神奇寶貝CP計算器</h1>
+                <h4 class="sub-title">輸入 神奇寶貝 等級 IV值 幫你算出該神奇寶貝的CP</h4>
+            </div>
             <div class="row" id="caculator">
+                <div id="select" class="col-md-12">
+                    <div><i class="fa fa-soccer-ball-o"></i> 選擇神奇寶貝</div>
+                    <select v-model="selected">
+                        <option v-for="item in items" v-bind:value="item.PokemonId">{{item.PokemonId}}.{{item.NameTw}}</option>
+                    </select>
+                </div>
+                <div id="level" class="col-md-12">
+                    <div><i class="fa fa-level-up"></i> 選擇等級(1~40)</div>
+                    <select v-model="selectedLevel">
+                        <option v-for="level in levels" v-bind:value="level">{{level}}</option>
+                    </select>
+                </div>
+                <div class="col-md-12 title">輸入IV值(0~15)</div>
                 <div class="col-md-4">
                     <i class="fa fa-heart"></i> HP
                     <div class="inp-contain">
@@ -39,9 +81,13 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <div id="total">
-                        Total = {{ total }}
+                    <div id="total" v-bind:class="{red : red}">
+                        {{ total }}
                     </div>
+                    <button class="btn btn-primary" v-bind:class="{ disabled : disable }" v-on:click="caculate">Caculate</button>
+                </div>
+                <div class="col-md-12" id="result">
+                    最後 CP = <span>{{cp}}</span>
                 </div>
             </div>
         </div>
@@ -51,17 +97,61 @@
             var VM = new Vue({
                 el : '#caculator',
                 data : {
+                    red : true,
+                    cp : '',
+                    levels : '',
+                    selectedLevel : '1',
+                    items : '',
+                    selected : '-1',
                     hp : '',
                     atk : '',
                     def : '',
-                    total : 5
+                    total : '',
+                    pokemon : '',
+                    disable : true
+                },
+                methods : {
+                    caculate : function(){
+                        var temp_atk = parseInt(this.atk) + this.pokemon[this.selected-1]['BaseAtk'];
+                        var temp_def = parseInt(this.def) + this.pokemon[this.selected-1]['BaseDef'];
+                        var temp_sta = parseInt(this.hp)  + this.pokemon[this.selected-1]['BaseSta'];
+                        console.log(this.selectedLevel)
+                        this.$http.get('/api/cpm/' + this.selectedLevel).then((response) => {
+                            var cp = (temp_atk * Math.sqrt(temp_def) * Math.sqrt(temp_sta) * (response.data[0]['Cpm']*response.data[0]['Cpm'])) / 10
+                            console.log(cp)
+                            this.cp = cp.toFixed(0);
+
+                        })
+                        // console.log(this.pokemon[this.selected]['BaseAtk'], this.pokemon[this.selected]['BaseDef'], this.pokemon[this.selected]['BaseSta'])
+                    }
                 },
                 created : function(){
-                    
+                    temp_levels = [];
+                    for(i = 1; i <= 40; i+=0.5){
+                        temp_levels.push(i);
+                    }
+                    this.levels = temp_levels;
+                    this.$http.get('/api/pokemon/0').then((response) => {
+                        console.log(response.data)
+                        this.items = response.data
+                        this.pokemon = response.data
+                    })
                 },
                 computed : {
                     total : function(){
-                        return parseInt(this.hp) + parseInt(this.atk) + parseInt(this.def);
+                        var temp;
+                        // console.log(this.selected)
+                        if(parseInt(this.hp) >= 0 && parseInt(this.hp) <= 15 && parseInt(this.atk) >= 0 && parseInt(this.atk) <= 15 && parseInt(this.def) >= 0 && parseInt(this.def) <= 15 && parseInt(this.hp) + parseInt(this.atk) + parseInt(this.def) <= 45 && this.selected != -1){
+                            this.disable = false;
+                            temp = "OK!"
+                            this.red = false;
+                        }
+                        else{
+                            this.disable = true;
+                            temp = "輸入正確才能計算喔"
+                            this.red = true
+                        }
+                        return temp;
                     }
                 }
             })
