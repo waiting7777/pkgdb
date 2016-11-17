@@ -1,0 +1,183 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>IV Caulator</title>
+
+        <script type="text/javascript" src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+
+    </head>
+
+    <style>
+        #caculator{
+            width: 800px;
+            margin : 0 auto;
+        }
+        #pic{
+            height: 200px;
+        }
+        #result{
+            margin-top: 60px;
+        }
+        #select, #level{
+            margin-bottom: 60px;
+        }
+        #cp, #hp{
+            margin-bottom: 32px;
+        }
+        .sub-title{
+            color : #777;
+        }
+        select{
+            width: 174px;
+            height: 26px;
+            margin-top: 5px;
+        }
+        .title{
+            margin-bottom : 10px;
+        }
+        button{
+            margin-top: 32px;
+        }
+        .red{
+            color : red;
+        }
+
+    </style>
+
+    <body>
+        <nav role="navigation" class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a href="/" class="navbar-brand">Pokemon DataBase</a></div><ul class="nav navbar-nav"><li><a href="/">Home</a></li><li><a href="/caculator.html">CP計算器</a></li><li><a href="/iv_caculator.html">IV計算器</a></li></ul></div></nav>
+        <div class="container">
+            <div class="page-header">
+                <h1>神奇寶貝IV計算器</h1>
+                <h4 class="sub-title">輸入 神奇寶貝  IV值 幫你算出該神奇寶貝的CP</h4>
+            </div>
+            <div class="row" id="iv-caculator">
+                <div id="select" class="col-md-6">
+                    <div><i class="fa fa-soccer-ball-o"></i> 選擇神奇寶貝</div>
+                    <select v-model="selected">
+                        <option v-for="item in items" v-bind:value="item.PokemonId">{{item.PokemonId}}.{{item.NameTw}}</option>
+                    </select>
+                </div>
+                <div id="pic" class="col-md-6">
+                    <img v-bind:src="pokemon_img">
+                </div>
+                <div id="cp" class="col-md-12">
+                    <div><i class="fa fa-tree"></i> 輸入CP</div>
+                    <input v-model="cp">
+                </div>
+                <div id="hp" class="col-md-12">
+                    <div><i class="fa fa-heart"></i> 輸入HP</div>
+                    <input v-model="hp">
+                </div>
+                <div id="level" class="col-md-12">
+                    <div><i class="fa fa-level-up"></i> 選擇升級所需星塵</div>
+                    <select v-model="selectedStar">
+                        <option v-for="star in stars" v-bind:value="star">{{star}}</option>
+                    </select>
+                </div>
+                <div class="col-md-12">
+                    <button class="btn btn-primary" v-bind:class="{ disabled : disable }" v-on:click="caculate">Caculate</button>
+                </div>
+                <div class="col-md-6" id="result">
+                    <table class="table">
+                        <thead>
+                            <th>ATK IV</th>
+                            <th>DEF IV</th>
+                            <th>STA IV</th>
+                            <th>IV<th>
+                        </thead>
+                        <tbody>
+                            <tr v-for="ivs in iv_table">
+                                <td v-for="iv in ivs">{{iv}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script>
+            var iv_result = {};
+
+            var VM = new Vue({
+                el : '#iv-caculator',
+                data : {
+                    pokemon_img : 'https://waiting7777.github.io/pokemon/image/pokemon_big/1.png',
+                    // red : true,
+                    cp : '',
+                    stars : [200,400,600,800,1000,1300,1600,1900,2200,2500,3000,3500,4000,4500,5000,6000,7000,8000,9000,1000],
+                    selectedStar : '2200',
+                    items : '',
+                    selected : '1',
+                    hp : '',
+                    iv_table : [],
+                    // def : '',
+                    // total : '',
+                    pokemon : '',
+                    cpm : '',
+                    disable : true
+                },
+                created : function(){
+
+                    this.$http.get('/api/pokemon/0').then((response) => {
+                        console.log(response.data)
+                        this.items = response.data
+                        this.pokemon = response.data
+                    })
+
+                },
+                methods : {
+                    caculate : function(){
+                        var iv_sta;
+                        var iv_atk;
+                        var iv_def;
+                        this.$http.get('/api/level/' + this.selectedStar).then((response) => {
+                            console.log(response.data)
+                            this.iv_table = [];
+                            for(var i in response.data){
+                                iv_sta = Math.ceil((this.hp / response.data[i]['Cpm']) - this.pokemon[this.selected-1]['BaseSta'])
+                                console.log(iv_sta, this.pokemon[this.selected-1]['BaseSta'])
+                                temp_sta = this.pokemon[this.selected-1]['BaseSta'] + iv_sta;
+                                for(j=0;j<=15;j++){
+                                    for(k=0;k<=15;k++){
+                                        temp_atk = j + this.pokemon[this.selected-1]['BaseAtk']
+                                        temp_def = k + this.pokemon[this.selected-1]['BaseDef']
+                                        console.log(temp_atk, temp_def)
+                                        if(Math.floor(temp_atk * Math.sqrt(temp_def) * Math.sqrt(temp_sta) * response.data[i]['Cpm'] * response.data[i]['Cpm'] / 10) == this.cp){
+                                            this.iv_table.push([j, k, iv_sta, ((j+k+iv_sta)/45*100).toFixed(2)+'%'])
+                                        }
+                                    }
+                                }
+                            }
+                        })
+                    }
+                },
+                watch : {
+                    selected : function(){
+                        this.pokemon_img = 'https://waiting7777.github.io/pokemon/image/pokemon_big/' + parseInt(this.selected) + '.png'
+                    },
+                    hp : function(){
+                        if(isNaN(this.hp) == false && this.hp.length > 0 && isNaN(this.cp) == false && this.cp.length > 0){
+                            this.disable = false;
+                        }
+                        else{
+                            this.disable = true;
+                        }
+                    },
+                    cp : function(){
+                        if(isNaN(this.hp) == false && this.hp.length > 0 && isNaN(this.cp) == false && this.cp.length > 0){
+                            this.disable = false;
+                        }
+                        else{
+                            this.disable = true;
+                        }
+                    }
+                }
+            });
+
+        </script>
+    </body>
+</html>

@@ -17,7 +17,7 @@
             #pic{
                 height: 200px;
             }
-            body, #result{
+            #result{
                 margin-top: 60px;
             }
             #select, #level{
@@ -46,6 +46,7 @@
     </head>
 
     <body>
+        <nav role="navigation" class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a href="/" class="navbar-brand">Pokemon DataBase</a></div><ul class="nav navbar-nav"><li><a href="/">Home</a></li><li><a href="/caculator.html">CP計算器</a></li><li><a href="/iv_caculator.html">IV計算器</a></li></ul></div></nav>
         <div class="container">
             <div class="page-header">
                 <h1>神奇寶貝CP計算器</h1>
@@ -126,7 +127,7 @@
                         this.$http.get('/api/cpm/' + this.selectedLevel).then((response) => {
                             var cp = (temp_atk * Math.sqrt(temp_def) * Math.sqrt(temp_sta) * (response.data[0]['Cpm']*response.data[0]['Cpm'])) / 10
                             console.log(cp)
-                            this.cp = cp.toFixed(0);
+                            this.cp = Math.floor(cp);
 
                         })
                         // console.log(this.pokemon[this.selected]['BaseAtk'], this.pokemon[this.selected]['BaseDef'], this.pokemon[this.selected]['BaseSta'])

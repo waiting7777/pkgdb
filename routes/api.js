@@ -96,4 +96,26 @@ router.get('/cpm/:level', function(req, res, next){
     });
 });
 
+router.get('/level', function(req, res, next){
+    Cpm.find({}, { _id : 0, __v : 0}).exec(function(err, cpm){
+        if(err) throw err;
+
+        res.send(cpm);
+        return;
+    });
+});
+
+router.get('/level/:stardust', function(req, res, next){
+    if(isNaN(req.params.stardust)){
+        res.send(' ');
+        return;
+    }
+    Cpm.find({ Stardust : req.params.stardust }, { _id : 0, __v : 0}).exec(function(err, cpm){
+        if(err) throw err;
+
+        res.send(cpm);
+        return;
+    });
+});
+
 module.exports = router;
