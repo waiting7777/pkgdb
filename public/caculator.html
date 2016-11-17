@@ -14,6 +14,9 @@
                 width: 800px;
                 margin : 0 auto;
             }
+            #pic{
+                height: 200px;
+            }
             body, #result{
                 margin-top: 60px;
             }
@@ -49,11 +52,14 @@
                 <h4 class="sub-title">輸入 神奇寶貝 等級 IV值 幫你算出該神奇寶貝的CP</h4>
             </div>
             <div class="row" id="caculator">
-                <div id="select" class="col-md-12">
+                <div id="select" class="col-md-6">
                     <div><i class="fa fa-soccer-ball-o"></i> 選擇神奇寶貝</div>
                     <select v-model="selected">
                         <option v-for="item in items" v-bind:value="item.PokemonId">{{item.PokemonId}}.{{item.NameTw}}</option>
                     </select>
+                </div>
+                <div id="pic" class="col-md-6">
+                    <img v-bind:src="pokemon_img">
                 </div>
                 <div id="level" class="col-md-12">
                     <div><i class="fa fa-level-up"></i> 選擇等級(1~40)</div>
@@ -97,12 +103,13 @@
             var VM = new Vue({
                 el : '#caculator',
                 data : {
+                    pokemon_img : 'https://waiting7777.github.io/pokemon/image/pokemon_big/1.png',
                     red : true,
                     cp : '',
                     levels : '',
                     selectedLevel : '1',
                     items : '',
-                    selected : '-1',
+                    selected : '1',
                     hp : '',
                     atk : '',
                     def : '',
@@ -140,7 +147,7 @@
                 computed : {
                     total : function(){
                         var temp;
-                        // console.log(this.selected)
+
                         if(parseInt(this.hp) >= 0 && parseInt(this.hp) <= 15 && parseInt(this.atk) >= 0 && parseInt(this.atk) <= 15 && parseInt(this.def) >= 0 && parseInt(this.def) <= 15 && parseInt(this.hp) + parseInt(this.atk) + parseInt(this.def) <= 45 && this.selected != -1){
                             this.disable = false;
                             temp = "OK!"
@@ -151,6 +158,7 @@
                             temp = "輸入正確才能計算喔"
                             this.red = true
                         }
+                        this.pokemon_img = 'https://waiting7777.github.io/pokemon/image/pokemon_big/' + parseInt(this.selected) + '.png'
                         return temp;
                     }
                 }
