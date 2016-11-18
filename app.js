@@ -10,6 +10,7 @@ var users = require('./routes/users');
 var pokemons = require('./routes/pokemon');
 var apis = require('./routes/api');
 var caculator = require('./routes/caculator');
+var skills = require('./routes/skill')
 
 
 var app = express();
@@ -31,6 +32,7 @@ app.use('/users', users);
 app.use('/api', apis);
 app.use('/pokemon', pokemons);
 app.use('/caculator', caculator);
+app.use('/skill', skills);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

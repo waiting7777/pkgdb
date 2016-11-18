@@ -1,0 +1,21 @@
+p.gray 快速技能
+table.table.table-bordered.table-hover.table-striped
+    thead
+        tr
+            th 名稱
+            th 屬性
+            th 傷害
+            th CD
+            th DPS
+            th EPS
+    tbody
+        for quick in quicks
+            tr
+                td
+                    a(href="/skill/quick/#{quick.QuickMoveId}") #{quick.NameTw}<br/>#{quick.NameEn}
+                td
+                    span(class="type-min #{quick.Type}") #{quick.Type}
+                td= quick.Damage
+                td= quick.ColdDown
+                td= quick.DPS
+                td= quick.EPS

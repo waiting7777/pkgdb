@@ -1,0 +1,19 @@
+include head
+    title Skill List
+
+    link(rel="stylesheet", href="css/pokemon.css")
+
+    body
+        include headbar
+        div.container
+            div.page-header
+                h1 Pokemon Skill List
+                h2.text-info 技能總表
+            div.table-contain
+                include quick_index_template
+                br
+                br
+                hr
+                br
+                br
+                include charge_index_template

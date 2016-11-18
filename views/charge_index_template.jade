@@ -1,0 +1,22 @@
+p.gray 主要技能
+table.table.table-bordered.table-hover.table-striped
+    thead
+        tr
+            th 名稱
+            th 屬性
+            th 傷害
+            th CD
+            th DPS
+            th 能量
+    tbody
+        for charge in charges
+            tr
+                td
+                    a(href="/skill/charge/#{charge.ChargeMoveId}") #{charge.NameTw}<br/>#{charge.NameEn}
+                td
+                    span(class="type-min #{charge.Type}") #{charge.Type}
+                td= charge.Damage
+                td= charge.ColdDown
+                td= charge.DPS
+                td
+                    img(src="../image/energy/energy#{charge.Charge}.png")
