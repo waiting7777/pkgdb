@@ -142,7 +142,7 @@ html
                                     th DPS
                                     th EPS
                                 - for(var i = 0; i < quick.length; i++)
-                                    tr(class="#{quick[i]['Type']}-bg")
+                                    tr
                                         td #{quick[i]['NameTw']}<br/>#{quick[i]['NameEn']}
                                         - if(quick[i]['Type'] == pokemon['Type1'] || quick[i]['Type'] == pokemon['Type2'])
                                             td
@@ -178,7 +178,7 @@ html
                                     th DPS
                                     th 能量
                                 - for(var i = 0; i < charge.length; i++)
-                                    tr(class="#{charge[i]['Type']}-bg")
+                                    tr
                                         td #{charge[i]['NameTw']}<br/>#{charge[i]['NameEn']}
                                         - if(charge[i]['Type'] == pokemon['Type1'] || charge[i]['Type'] == pokemon['Type2'])
                                             td
