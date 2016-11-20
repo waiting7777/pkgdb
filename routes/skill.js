@@ -69,7 +69,6 @@ router.get('/quick/:id', function(req, res, next){
 
     })
     .then(function(pokemons){
-        console.log(pokemons)
         res.render('quick_skill', {quick : temp['quickmove'], prev : temp['prev'], next : temp['next'], pokemon : pokemons });
     })
 });
@@ -121,7 +120,6 @@ router.get('/charge/:id', function(req, res, next){
 
     })
     .then(function(pokemons){
-        console.log(pokemons)
         res.render('charge_skill', {charge : temp['chargemove'], prev : temp['prev'], next : temp['next'], pokemon : pokemons });
     })
 });
