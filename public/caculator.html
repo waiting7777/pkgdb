@@ -5,11 +5,16 @@
 
         <script type="text/javascript" src="https://unpkg.com/vue@latest/dist/vue.js"></script>
         <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/font-awesome.min.css">
 
         <style>
+            body{
+                padding-top: 100px;
+            }
             #caculator{
                 width: 800px;
                 margin : 0 auto;
@@ -46,7 +51,7 @@
     </head>
 
     <body>
-        <nav role="navigation" class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a href="/" class="navbar-brand">Pokemon DataBase</a></div><ul class="nav navbar-nav"><li><a href="/">Home</a></li><li><a href="/caculator.html">CP計算器</a></li><li><a href="/iv_caculator.html">IV計算器</a></li></ul></div></nav>
+        <nav role="navigation" style="position:fixed;width:100%;top:0" class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a href="/" class="navbar-brand">Pokemon DataBase</a></div><ul class="nav navbar-nav"><li class="dropdown"><a href="#" data-toggle="dropdown" role="button" class="dropdown-toggle"><span>技能表</span><i class="fa fa-caret-down"></i></a><ul role="menu" class="dropdown-menu"><li><a href="/skill">技能總表</a></li><li><a href="/skill/quick">快速技能</a></li><li><a href="/skill/charge">主要技能</a></li></ul></li><li><a href="/caculator.html">CP計算器</a></li><li><a href="/iv_caculator.html">IV計算器</a></li></ul></div></nav>
         <div class="container">
             <div class="page-header">
                 <h1>神奇寶貝CP計算器</h1>

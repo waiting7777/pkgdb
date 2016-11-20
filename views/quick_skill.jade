@@ -1,0 +1,76 @@
+include head
+        link(rel="stylesheet", href="../../css/pokemon.css")
+        link(rel="stylesheet", href="../../css/font-awesome.min.css")
+
+        title #{quick['NameEn']}
+
+    body
+        include headbar
+        div.container#pokemon-data
+            div#pokemon-img
+                h2 #{quick['NameTw']}
+                div.sub-title #{quick['NameEn']}
+            div#link-contain
+                - if(quick['QuickMoveId'] != 1)
+                    a(href="#{quick['QuickMoveId']-1}")
+                        div#prev.skill-link-card
+                            div ##{quick['QuickMoveId']-1} #{prev}
+                - if(quick['QuickMoveId'] != 41)
+                    a(href="#{quick['QuickMoveId']+1}")
+                        div#next.skill-link-card
+                            div ##{quick['QuickMoveId']+1} #{next}
+            hr
+            div.row
+                div.col-md-6
+                    div#base.panel.panel-danger
+                        div.panel-heading
+                            i.fa.fa-flash
+                            span 所有技能
+                        div.panel-body
+                            p.gray 快速技能
+                            table.table
+                                tr
+                                    td 名稱
+                                    td #{quick['NameTw']} #{quick['NameEn']}
+                                tr
+                                    td 屬性
+                                    td
+                                        span(class="type-min #{quick['Type']}") #{quick['Type']}
+                                tr
+                                    td 傷害
+                                    td #{quick['Damage']}
+                                tr
+                                    td CD
+                                    td #{quick['ColdDown']}
+                                tr
+                                    td DPS
+                                    td #{quick['DPS']}
+                                tr
+                                    td EPS
+                                    td #{quick['EPS']}
+                div.col-md-6
+                    div.panel.panel-info#quick-relate
+                        div.panel-heading
+                            i.fa.fa-cubes
+                            span 誰有這招
+                        div.panel-body
+                            table.table
+                                thead
+                                    th ID
+                                    th Pokemon
+                                    th 名稱
+                                    th 屬性
+                                    th Max Cp
+                                tbody
+                                    - for(i in pokemon)
+                                        tr
+                                            td #{pokemon[i]['PokemonId']}
+                                            td
+                                                img(src="/image/pokemon/#{pokemon[i]['PokemonId']}.png")
+                                            td #{pokemon[i]['NameTw']}
+                                            td
+                                                span(class="type-min #{pokemon[i]['Type1']}") #{pokemon[i]['Type1']}
+                                                - if(pokemon[i]['Type2'] !== '')
+                                                    span(class="type-min #{pokemon[i]['Type2']}") #{pokemon[i]['Type2']}
+                                            td #{pokemon[i]['MaxCp']}
+                                        

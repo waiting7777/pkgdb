@@ -1,10 +1,19 @@
-nav(class="navbar navbar-default" role="navigation")
+nav(class="navbar navbar-default" role="navigation" style="position:fixed;width:100%;top:0;z-index:9999")
     div.container-fluid
         div.navbar-header
             a(class="navbar-brand" href="/") Pokemon DataBase
         ul(class="nav navbar-nav")
-            li
-                a(href="/skill") 技能總表
+            li.dropdown
+                a(href="#", class="dropdown-toggle" data-toggle="dropdown" role="button")
+                    span 技能表
+                    i.fa.fa-caret-down
+                ul(class="dropdown-menu" role="menu")
+                    li
+                        a(href="/skill") 技能總表
+                    li
+                        a(href="/skill/quick") 快速技能
+                    li
+                        a(href="/skill/charge") 主要技能
             li
                 a(href="/caculator.html") CP計算器
             li

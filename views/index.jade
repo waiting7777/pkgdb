@@ -1,6 +1,7 @@
 include head
 
         link(rel="stylesheet", href="css/style.css")
+        link(rel="stylesheet", href="css/pokemon.css")
 
         script(src="js/jquery.tablesorter.min.js")
         script(src="js/index.js")
@@ -43,5 +44,8 @@ include head
                                     a(href="pokemon/#{pokemon.PokemonId}") #{pokemon.NameEn}
                                 td
                                     a(href="pokemon/#{pokemon.PokemonId}") #{pokemon.NameTw}
-                                td= pokemon.type
+                                td
+                                    span(class="type-min #{pokemon.Type1}") #{pokemon.Type1}
+                                    - if(pokemon['Type2'] !== '')
+                                        span(class="type-min #{pokemon.Type2}") #{pokemon.Type2}
                                 td= pokemon.MaxCp

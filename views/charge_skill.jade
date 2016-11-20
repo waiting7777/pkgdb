@@ -1,0 +1,76 @@
+include head
+        link(rel="stylesheet", href="../../css/pokemon.css")
+        link(rel="stylesheet", href="../../css/font-awesome.min.css")
+
+        title #{charge['NameEn']}
+
+    body
+        include headbar
+        div.container#pokemon-data
+            div#pokemon-img
+                h2 #{charge['NameTw']}
+                div.sub-title #{charge['NameEn']}
+            div#link-contain
+                - if(charge['ChargeMoveId'] != 1)
+                    a(href="#{charge['ChargeMoveId']-1}")
+                        div#prev.skill-link-card
+                            div ##{charge['ChargeMoveId']-1} #{prev}
+                - if(charge['ChargeMoveId'] != 41)
+                    a(href="#{charge['ChargeMoveId']+1}")
+                        div#next.skill-link-card
+                            div ##{charge['ChargeMoveId']+1} #{next}
+            hr
+            div.row
+                div.col-md-6
+                    div#base.panel.panel-danger
+                        div.panel-heading
+                            i.fa.fa-flash
+                            span 所有技能
+                        div.panel-body
+                            p.gray 主要技能
+                            table.table
+                                tr
+                                    td 名稱
+                                    td #{charge['NameTw']} #{charge['NameEn']}
+                                tr
+                                    td 屬性
+                                    td
+                                        span(class="type-min #{charge['Type']}") #{charge['Type']}
+                                tr
+                                    td 傷害
+                                    td #{charge['Damage']}
+                                tr
+                                    td CD
+                                    td #{charge['ColdDown']}
+                                tr
+                                    td DPS
+                                    td #{charge['DPS']}
+                                tr
+                                    td 能量
+                                    td
+                                        img(src="/image/energy/energy#{charge['Charge']}.png")
+                div.col-md-6
+                    div.panel.panel-info#quick-relate
+                        div.panel-heading
+                            i.fa.fa-cubes
+                            span 誰有這招
+                        div.panel-body
+                            table.table
+                                thead
+                                    th ID
+                                    th Pokemon
+                                    th 名稱
+                                    th 屬性
+                                    th Max Cp
+                                tbody
+                                    - for(i in pokemon)
+                                        tr
+                                            td #{pokemon[i]['PokemonId']}
+                                            td
+                                                img(src="/image/pokemon/#{pokemon[i]['PokemonId']}.png")
+                                            td #{pokemon[i]['NameTw']}
+                                            td
+                                                span(class="type-min #{pokemon[i]['Type1']}") #{pokemon[i]['Type1']}
+                                                - if(pokemon[i]['Type2'] !== '')
+                                                    span(class="type-min #{pokemon[i]['Type2']}") #{pokemon[i]['Type2']}
+                                            td #{pokemon[i]['MaxCp']}
