@@ -10,7 +10,7 @@ var users = require('./routes/users');
 var pokemons = require('./routes/pokemon');
 var apis = require('./routes/api');
 var caculator = require('./routes/caculator');
-var skills = require('./routes/skill')
+var skills = require('./routes/skill');
 
 
 var app = express();

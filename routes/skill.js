@@ -84,7 +84,7 @@ router.get('/charge/:id', function(req, res, next){
 
     var temp = [];
 
-    if(common.idCheck(req.params.id, 41) == false){
+    if(common.idCheck(req.params.id, 83) == false){
         res.render('error', {
             message: 'ERROR',
             error: 'ERROR'
@@ -100,7 +100,7 @@ router.get('/charge/:id', function(req, res, next){
             temp['chargemove'] = chargemove[0];
             temp['next'] = chargemove[1]['NameTw'];
         }
-        else if(id == 41){
+        else if(id == 83){
             temp['chargemove'] = chargemove[1];
             temp['prev'] = chargemove[0]['NameTw'];
         }
