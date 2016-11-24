@@ -158,28 +158,39 @@
                 watch : {
                     sortby : function(){
                         console.log(this.sortby)
-                        this.sort(this.sortby);
+                        this.sort();
                     },
                     databy : function(){
                         console.log(this.databy)
-                        this.change(this.databy);
+                        this.change();
                     }
                 },
                 methods : {
-                    change : function(databy){
+                    change : function(){
 
-                        if(databy == 'new'){
+                        if(this.databy == 'new'){
                             for(var i = 0; i < this.pokemon.length; i++){
+                                data[i] = {};
                                 data[i]['value'] = this.pokemon[i]['MaxCp'];
+                                data[i]['name'] = this.pokemon[i]['NameEn'];
+                                data[i]['id'] = this.pokemon[i]['PokemonId'];
                             }
                         }
                         else{
                             for(var i = 0; i < this.pokemon.length; i++){
+                                data[i] = {};
                                 data[i]['value'] = this.pokemon[i]['Old_MaxCp'];
+                                data[i]['name'] = this.pokemon[i]['NameEn'];
+                                data[i]['id'] = this.pokemon[i]['PokemonId'];
                             }
                         }
 
-
+                        if(this.sortby == 'id'){
+                            data.sort(function(a, b) { return a.id - b.id; });
+                        }
+                        else{
+                            data.sort(function(a, b) { return b.value - a.value; });
+                        }
 
                         x.domain([0, d3.max(data, function(d){ return d.value; })]);
                         y.domain(data.map(function(d){ return d.name; }));
@@ -215,9 +226,26 @@
                             .duration(transition_time)
                             .call(yAxis);
                     },
-                    sort : function(by){
+                    sort : function(){
 
-                        if(by == 'id'){
+                        if(this.databy == 'new'){
+                            for(var i = 0; i < this.pokemon.length; i++){
+                                data[i] = {};
+                                data[i]['value'] = this.pokemon[i]['MaxCp'];
+                                data[i]['name'] = this.pokemon[i]['NameEn'];
+                                data[i]['id'] = this.pokemon[i]['PokemonId'];
+                            }
+                        }
+                        else{
+                            for(var i = 0; i < this.pokemon.length; i++){
+                                data[i] = {};
+                                data[i]['value'] = this.pokemon[i]['Old_MaxCp'];
+                                data[i]['name'] = this.pokemon[i]['NameEn'];
+                                data[i]['id'] = this.pokemon[i]['PokemonId'];
+                            }
+                        }
+
+                        if(this.sortby == 'id'){
                             data.sort(function(a, b) { return a.id - b.id; });
                         }
                         else{
