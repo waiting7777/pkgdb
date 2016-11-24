@@ -41,9 +41,26 @@
     </head>
 
     <body>
-        <div class="container" id="change">
-            <button v-on:click="sort">sort</button>
-            <div id="change-chart">
+        <div class="container row" id="change">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                <div>Sort : </div>
+                <input type="radio" id="by-id" value="id" v-model="sortby">
+                <label for="by-id">by id</label>
+                <br>
+                <input type="radio" id="by-cp" value="cp" v-model="sortby">
+                <label for="by-cp">by cp</label>
+            </div>
+            <div class="col-md-4">
+                <div>Data : </div>
+                <input type="radio" id="old" value="old" v-model="databy">
+                <label for="old">更新前</label>
+                <br>
+                <input type="radio" id="new" value="new" v-model="databy">
+                <label for="new">更新後</label>
+            </div>
+            <div class="col-md-2"></div>
+            <div id="change-chart" class="col-md-12">
 
             </div>
 
@@ -70,7 +87,9 @@
             var VM = new Vue({
                 el : '#change',
                 data : {
-                    pokemon : ''
+                    pokemon : '',
+                    sortby : 'id',
+                    databy : 'new',
                 },
                 created : function(){
 
@@ -136,10 +155,74 @@
                     });
 
                 },
+                watch : {
+                    sortby : function(){
+                        console.log(this.sortby)
+                        this.sort(this.sortby);
+                    },
+                    databy : function(){
+                        console.log(this.databy)
+                        this.change(this.databy);
+                    }
+                },
                 methods : {
-                    sort : function(){
+                    change : function(databy){
 
-                        data.sort(function(a, b) { return b.value - a.value; });
+                        if(databy == 'new'){
+                            for(var i = 0; i < this.pokemon.length; i++){
+                                data[i]['value'] = this.pokemon[i]['MaxCp'];
+                            }
+                        }
+                        else{
+                            for(var i = 0; i < this.pokemon.length; i++){
+                                data[i]['value'] = this.pokemon[i]['Old_MaxCp'];
+                            }
+                        }
+
+
+
+                        x.domain([0, d3.max(data, function(d){ return d.value; })]);
+                        y.domain(data.map(function(d){ return d.name; }));
+
+                        d3.selectAll('rect')
+                            .data(data)
+                            .transition()
+                            .duration(transition_time)
+                            .attr('width', function(d) { return x(d.value) })
+                            .attr('height', y.rangeBand());
+
+                        d3.selectAll('.value')
+                            .data(data)
+                            .transition()
+                            .duration(transition_time)
+                            .attr("x", function(d) { return x(d.value); })
+                            .attr("y", y.rangeBand() / 2)
+                            .attr("dx", -3)
+                            .attr("dy", ".35em")
+                            .text(function(d) { return format(d.value); });
+
+                        d3.selectAll('image')
+                            .data(data)
+                            .attr("xlink:href", function(d) { return  "image/pokemon/" + d.id + ".png"})
+                            .transition()
+                            .duration(transition_time)
+                            .attr("x", function(d) { return x(d.value); })
+                            .attr("y", y.rangeBand() / 2 - 24);
+
+
+                        d3.selectAll('.y')
+                            .transition()
+                            .duration(transition_time)
+                            .call(yAxis);
+                    },
+                    sort : function(by){
+
+                        if(by == 'id'){
+                            data.sort(function(a, b) { return a.id - b.id; });
+                        }
+                        else{
+                            data.sort(function(a, b) { return b.value - a.value; });
+                        }
 
                         x.domain([0, d3.max(data, function(d){ return d.value; })]);
                         y.domain(data.map(function(d){ return d.name; }));
