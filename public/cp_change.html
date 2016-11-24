@@ -1,0 +1,187 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>CP Change Chart</title>
+
+        <script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+        <script src="https://d3js.org/d3.v3.min.js"></script>
+
+        </script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="css/font-awesome.min.css">
+
+        <style media="screen">
+
+            .bar rect {
+                fill: steelblue;
+            }
+
+            .bar text.value {
+                fill: white;
+            }
+            .axis {
+                shape-rendering: crispEdges;
+            }
+            /*.x.axis line {
+                stroke: #fff;
+                stroke-opacity: .8;
+            }*/
+            .y.axis path {
+                stroke: black;
+            }
+            .axis path {
+                fill: none;
+            }
+        </style>
+
+    </head>
+
+    <body>
+        <div class="container" id="change">
+            <button v-on:click="sort">sort</button>
+            <div id="change-chart">
+
+            </div>
+
+        </div>
+
+        <script>
+            var m = [30, 100, 10, 100];
+            var w = 960 - m[1] - m[3];
+            var h = 4000 - m[0] - m[2];
+
+            var format = d3.format(",.0f");
+
+            var x = d3.scale.linear().range([0, w]);
+            var y = d3.scale.ordinal().rangeRoundBands([0, h], 0.1);
+
+            var xAxis = d3.svg.axis().scale(x).orient("top").tickSize(-h);
+            var yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
+
+            var svg, bar;
+
+            var data = [];
+            var transition_time = 1200;
+
+            var VM = new Vue({
+                el : '#change',
+                data : {
+                    pokemon : ''
+                },
+                created : function(){
+
+                    this.$http.get('/api/pokemon/0').then((response) => {
+                        console.log(response.data)
+                        this.pokemon = response.data
+
+                        svg = d3.select('#change-chart').append('svg')
+                                    .attr('width', w + m[1] + m[3])
+                                    .attr('height', h + m[0] + m[2])
+                                    .append('g')
+                                    .attr('transform', 'translate(' + m[3] + ',' + m[0] + ')');
+
+                        for(var i = 0; i < this.pokemon.length; i++){
+                            data[i] = {};
+                            data[i]['value'] = this.pokemon[i]['MaxCp'];
+                            data[i]['name'] = this.pokemon[i]['NameEn'];
+                            data[i]['id'] = this.pokemon[i]['PokemonId'];
+                        }
+
+                        data.forEach(function(d) { d.value = +d.value; });
+                        // data.sort(function(a, b) { return b.value - a.value; });
+
+                        x.domain([0, d3.max(data, function(d){ return d.value; })]);
+                        y.domain(data.map(function(d){ return d.name; }));
+
+                        yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
+
+                        bar = svg.selectAll('g.bar')
+                            .data(data)
+                            .enter().append('g')
+                            .attr('class', 'bar')
+                            .attr('transform', function(d) { return 'translate(0,' + y(d.name) + ')'; });
+
+                        bar.append('rect')
+                            .attr('width', function(d) { return x(d.value) })
+                            .attr('height', y.rangeBand());
+
+                        bar.append("text")
+                            .attr("class", "value")
+                            .attr("x", function(d) { return x(d.value); })
+                            .attr("y", y.rangeBand() / 2)
+                            .attr("dx", -3)
+                            .attr("dy", ".35em")
+                            .attr("text-anchor", "end")
+                            .text(function(d) { return format(d.value); });
+
+                        svg.append("g")
+                            .attr("class", "x axis")
+                            .call(xAxis);
+
+                        svg.append("g")
+                            .attr("class", "y axis")
+                            .call(yAxis);
+
+                        bar.append("image")
+                            .attr("x", function(d) { return x(d.value); })
+                            .attr("y", y.rangeBand() / 2 - 24)
+                            .attr("xlink:href", function(d) { return  "image/pokemon/" + d.id + ".png"})
+                            .attr('width', 50)
+                            .attr('height', 50);
+
+                    });
+
+                },
+                methods : {
+                    sort : function(){
+
+                        data.sort(function(a, b) { return b.value - a.value; });
+
+                        x.domain([0, d3.max(data, function(d){ return d.value; })]);
+                        y.domain(data.map(function(d){ return d.name; }));
+
+                        d3.selectAll('rect')
+                            .data(data)
+                            .transition()
+                            .duration(transition_time)
+                            .attr('width', function(d) { return x(d.value) })
+                            .attr('height', y.rangeBand());
+
+                        d3.selectAll('.value')
+                            .data(data)
+                            .transition()
+                            .duration(transition_time)
+                            .attr("x", function(d) { return x(d.value); })
+                            .attr("y", y.rangeBand() / 2)
+                            .attr("dx", -3)
+                            .attr("dy", ".35em")
+                            .text(function(d) { return format(d.value); });
+
+                        d3.selectAll('image')
+                            .data(data)
+                            .attr("xlink:href", function(d) { return  "image/pokemon/" + d.id + ".png"})
+                            .transition()
+                            .duration(transition_time)
+                            .attr("x", function(d) { return x(d.value); })
+                            .attr("y", y.rangeBand() / 2 - 24);
+
+
+                        d3.selectAll('.y')
+                            .transition()
+                            .duration(transition_time)
+                            .call(yAxis);
+
+
+                    }
+                }
+            });
+
+
+
+        </script>
+    </body>
+</html>
