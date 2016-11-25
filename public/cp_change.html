@@ -507,6 +507,11 @@
                                 })
                                 .attr("y", y.rangeBand() / 2 - 24);
 
+                            d3.selectAll('.y')
+                                .transition()
+                                .duration(transition_time)
+                                .call(yAxis);
+
                         }
                         else{
                             if(this.stackflag == true){
