@@ -140,38 +140,38 @@
             var transition_time = 1200;
 
             function handleMouseOver(d){
-                
+
                 VM.tipImg = '/image/pokemon_big/' + d.id + '.png';
                 VM.tipOpacity = 1;
-                VM.tipNameTw = VM.pokemon[d.id]['NameTw'];
-                VM.tipNameEn = VM.pokemon[d.id]['NameEn'];
-                VM.tipOldAtk = VM.pokemon[d.id]['Old_BaseAtk'];
-                VM.tipOldDef = VM.pokemon[d.id]['Old_BaseDef'];
-                VM.tipOldSta = VM.pokemon[d.id]['Old_BaseSta'];
-                VM.tipOldCp = VM.pokemon[d.id]['Old_MaxCp'];
-                VM.tipAtk = VM.pokemon[d.id]['BaseAtk'];
-                VM.tipDef = VM.pokemon[d.id]['BaseDef'];
-                VM.tipSta = VM.pokemon[d.id]['BaseSta'];
-                VM.tipCp = VM.pokemon[d.id]['MaxCp'];
-                if(VM.pokemon[d.id]['BaseAtk'] > VM.pokemon[d.id]['Old_BaseAtk']){
+                VM.tipNameTw = VM.pokemon[d.id-1]['NameTw'];
+                VM.tipNameEn = VM.pokemon[d.id-1]['NameEn'];
+                VM.tipOldAtk = VM.pokemon[d.id-1]['Old_BaseAtk'];
+                VM.tipOldDef = VM.pokemon[d.id-1]['Old_BaseDef'];
+                VM.tipOldSta = VM.pokemon[d.id-1]['Old_BaseSta'];
+                VM.tipOldCp = VM.pokemon[d.id-1]['Old_MaxCp'];
+                VM.tipAtk = VM.pokemon[d.id-1]['BaseAtk'];
+                VM.tipDef = VM.pokemon[d.id-1]['BaseDef'];
+                VM.tipSta = VM.pokemon[d.id-1]['BaseSta'];
+                VM.tipCp = VM.pokemon[d.id-1]['MaxCp'];
+                if(VM.pokemon[d.id-1]['BaseAtk'] > VM.pokemon[d.id-1]['Old_BaseAtk']){
                     VM.atkColor = "#5aba3b";
                 }
                 else{
                     VM.atkColor = "#b83128";
                 }
-                if(VM.pokemon[d.id]['BaseDef'] > VM.pokemon[d.id]['Old_BaseDef']){
+                if(VM.pokemon[d.id-1]['BaseDef'] > VM.pokemon[d.id-1]['Old_BaseDef']){
                     VM.defColor = "#5aba3b";
                 }
                 else{
                     VM.defColor = "#b83128";
                 }
-                if(VM.pokemon[d.id]['BaseSta'] > VM.pokemon[d.id]['Old_BaseSta']){
+                if(VM.pokemon[d.id-1]['BaseSta'] > VM.pokemon[d.id-1]['Old_BaseSta']){
                     VM.staColor = "#5aba3b";
                 }
                 else{
                     VM.staColor = "#b83128";
                 }
-                if(VM.pokemon[d.id]['MaxCp'] > VM.pokemon[d.id]['Old_MaxCp']){
+                if(VM.pokemon[d.id-1]['MaxCp'] > VM.pokemon[d.id-1]['Old_MaxCp']){
                     VM.cpColor = "#5aba3b";
                 }
                 else{
