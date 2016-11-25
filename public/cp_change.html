@@ -102,20 +102,20 @@
             <div id="tip" v-bind:style="{ opacity : tipOpacity }">
                 <img v-bind:src="tipImg">
                 <div id="name">
-                    <div>{{ tipNameTw }}</div>
-                    <div>{{ tipNameEn }}</div>
+                    <div>{{ tipObj.NameTw }}</div>
+                    <div>{{ tipObj.NameEn }}</div>
                 </div>
                 <div id="atk">
-                    <span>ATK : {{tipOldAtk}} => </span><span v-bind:style="{ color : atkColor }">{{tipAtk}}</span>
+                    <span>ATK : {{tipObj.Old_BaseAtk}} => </span><span v-bind:style="{ color : atkColor }">{{tipObj.BaseAtk}}</span>
                 </div>
                 <div id="def">
-                    <span>DEF : {{tipOldDef}} => </span><span v-bind:style="{ color : defColor }">{{tipDef}}</span>
+                    <span>DEF : {{tipObj.Old_BaseDef}} => </span><span v-bind:style="{ color : defColor }">{{tipObj.BaseDef}}</span>
                 </div>
                 <div id="sta">
-                    <span>STA : {{tipOldSta}} => </span><span v-bind:style="{ color : staColor }">{{tipSta}}</span>
+                    <span>STA : {{tipObj.Old_BaseSta}} => </span><span v-bind:style="{ color : staColor }">{{tipObj.BaseSta}}</span>
                 </div>
                 <div id="cp">
-                    <span>Max Cp : {{tipOldCp}} => </span><span v-bind:style="{ color : cpColor }">{{tipCp}}</span>
+                    <span>Max Cp : {{tipObj.Old_MaxCp}} => </span><span v-bind:style="{ color : cpColor }">{{tipObj.MaxCp}}</span>
                 </div>
             </div>
 
@@ -139,59 +139,28 @@
             var data = [];
             var transition_time = 1200;
 
+            function colorCheck(newStat, oldStat){
+                if(newStat > oldStat){
+                    return "#5aba3b";
+                }
+                else if(newStat == oldStat){
+                    return "#000000";
+                }
+                else{
+                    return "#b83128";
+                }
+            }
+
             function handleMouseOver(d){
 
                 VM.tipImg = '/image/pokemon_big/' + d.id + '.png';
                 VM.tipOpacity = 1;
-                VM.tipNameTw = VM.pokemon[d.id-1]['NameTw'];
-                VM.tipNameEn = VM.pokemon[d.id-1]['NameEn'];
-                VM.tipOldAtk = VM.pokemon[d.id-1]['Old_BaseAtk'];
-                VM.tipOldDef = VM.pokemon[d.id-1]['Old_BaseDef'];
-                VM.tipOldSta = VM.pokemon[d.id-1]['Old_BaseSta'];
-                VM.tipOldCp = VM.pokemon[d.id-1]['Old_MaxCp'];
-                VM.tipAtk = VM.pokemon[d.id-1]['BaseAtk'];
-                VM.tipDef = VM.pokemon[d.id-1]['BaseDef'];
-                VM.tipSta = VM.pokemon[d.id-1]['BaseSta'];
-                VM.tipCp = VM.pokemon[d.id-1]['MaxCp'];
-                if(VM.pokemon[d.id-1]['BaseAtk'] > VM.pokemon[d.id-1]['Old_BaseAtk']){
-                    VM.atkColor = "#5aba3b";
-                }
-                else if(VM.pokemon[d.id-1]['BaseAtk'] == VM.pokemon[d.id-1]['Old_BaseAtk']){
-                    VM.atkColor = "#000000";
-                }
-                else{
-                    VM.atkColor = "#b83128";
-                }
+                VM.tipObj = VM.pokemon[d.id-1];
+                VM.atkColor = colorCheck(VM.tipObj['BaseAtk'], VM.tipObj['Old_BaseAtk']);
+                VM.defColor = colorCheck(VM.tipObj['BaseDef'], VM.tipObj['Old_BaseDef']);
+                VM.staColor = colorCheck(VM.tipObj['BaseSta'], VM.tipObj['Old_BaseSta']);
+                VM.cpColor = colorCheck(VM.tipObj['MaxCp'], VM.tipObj['Old_MaxCp']);
 
-                if(VM.pokemon[d.id-1]['BaseDef'] > VM.pokemon[d.id-1]['Old_BaseDef']){
-                    VM.defColor = "#5aba3b";
-                }
-                else if(VM.pokemon[d.id-1]['BaseDef'] == VM.pokemon[d.id-1]['Old_BaseDef']){
-                    VM.defColor = "#000000";
-                }
-                else{
-                    VM.defColor = "#b83128";
-                }
-
-                if(VM.pokemon[d.id-1]['BaseSta'] > VM.pokemon[d.id-1]['Old_BaseSta']){
-                    VM.staColor = "#5aba3b";
-                }
-                else if(VM.pokemon[d.id-1]['BaseSta'] == VM.pokemon[d.id-1]['Old_BaseSta']){
-                    VM.staColor = "#000000";
-                }
-                else{
-                    VM.staColor = "#b83128";
-                }
-
-                if(VM.pokemon[d.id-1]['MaxCp'] > VM.pokemon[d.id-1]['Old_MaxCp']){
-                    VM.cpColor = "#5aba3b";
-                }
-                else if(VM.pokemon[d.id-1]['MaxCp'] == VM.pokemon[d.id-1]['Old_MaxCp']){
-                    VM.cpColor = "#000000";
-                }
-                else{
-                    VM.cpColor = "#b83128";
-                }
             }
 
             function handleMouseOut(d){
@@ -205,17 +174,8 @@
                     sortby : 'id',
                     databy : 'new',
                     tipImg : '/image/pokemon_big/1.png',
-                    tipNameTw : '',
-                    tipNameEn : '',
+                    tipObj : {},
                     tipOpacity : 0,
-                    tipOldAtk : 0,
-                    tipOldDef : 0,
-                    tipOldSta : 0,
-                    tipOldCp : 0,
-                    tipAtk : 0,
-                    tipDef : 0,
-                    tipSta : 0,
-                    tipCp : 0,
                     atkColor : '#000',
                     defColor : '#000',
                     staColor : '#000',
