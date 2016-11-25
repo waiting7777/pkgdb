@@ -16,12 +16,29 @@
 
         <style media="screen">
 
-            .bar rect {
+            .bar .blue-bar{
                 fill: steelblue;
             }
 
+            .bar2 .blue-bar{
+                fill: steelblue;
+            }
+
+            .bar .red-bar {
+                fill : #b83128;
+            }
+
+            .bar .green-bar {
+                fill : #5aba3b;
+            }
+            text{
+                pointer-events: none;
+            }
             .bar text.value {
                 fill: white;
+            }
+            .bar text.value.black {
+                fill: black;
             }
             .axis {
                 shape-rendering: crispEdges;
@@ -36,11 +53,29 @@
             .axis path {
                 fill: none;
             }
+            body{
+                padding-top: 100px;
+            }
+            #tip{
+                box-shadow: 0 0 6px rgba(0,0,0,0.27);
+                position: fixed;
+                right: 10%;
+                top: 25%;
+                transition: opacity 0.7s ease;
+                padding: 20px;
+            }
+            #tip img{
+                margin: 20px 0;
+            }
+            #tip div{
+                margin-top: 5px;
+            }
         </style>
 
     </head>
 
     <body>
+        <nav role="navigation" style="position:fixed;width:100%;top:0;z-index:9999" class="navbar navbar-default"><div class="container-fluid"><div class="navbar-header"><a href="/cp_change.html" class="navbar-brand">Pokemon DataBase</a></div><ul class="nav navbar-nav"><li><a href="/">神奇寶貝總表</a></li><li class="dropdown"><a href="#" data-toggle="dropdown" role="button" class="dropdown-toggle"><span>技能表</span><i class="fa fa-caret-down"></i></a><ul role="menu" class="dropdown-menu"><li><a href="/skill">技能總表</a></li><li><a href="/skill/quick">快速技能</a></li><li><a href="/skill/charge">主要技能</a></li></ul></li><li><a href="/caculator.html">CP計算器</a></li><li><a href="/iv_caculator.html">IV計算器</a></li></ul></div></nav>
         <div class="container row" id="change">
             <div class="col-md-2"></div>
             <div class="col-md-4">
@@ -58,10 +93,30 @@
                 <br>
                 <input type="radio" id="new" value="new" v-model="databy">
                 <label for="new">更新後</label>
+                <br>
+                <input type="radio" id="stack" value="stack" v-model="databy">
+                <label for="stack">疊加比對</label>
             </div>
             <div class="col-md-2"></div>
-            <div id="change-chart" class="col-md-12">
-
+            <div id="change-chart" class="col-md-12"></div>
+            <div id="tip" v-bind:style="{ opacity : tipOpacity }">
+                <img v-bind:src="tipImg">
+                <div id="name">
+                    <div>{{ tipNameTw }}</div>
+                    <div>{{ tipNameEn }}</div>
+                </div>
+                <div id="atk">
+                    <span>ATK : {{tipOldAtk}} => </span><span v-bind:style="{ color : atkColor }">{{tipAtk}}</span>
+                </div>
+                <div id="def">
+                    <span>DEF : {{tipOldDef}} => </span><span v-bind:style="{ color : defColor }">{{tipDef}}</span>
+                </div>
+                <div id="sta">
+                    <span>STA : {{tipOldSta}} => </span><span v-bind:style="{ color : staColor }">{{tipSta}}</span>
+                </div>
+                <div id="cp">
+                    <span>Max Cp : {{tipOldCp}} => </span><span v-bind:style="{ color : cpColor }">{{tipCp}}</span>
+                </div>
             </div>
 
         </div>
@@ -79,10 +134,54 @@
             var xAxis = d3.svg.axis().scale(x).orient("top").tickSize(-h);
             var yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
 
-            var svg, bar;
+            var svg, bar, bar2;
 
             var data = [];
             var transition_time = 1200;
+
+            function handleMouseOver(d){
+                
+                VM.tipImg = '/image/pokemon_big/' + d.id + '.png';
+                VM.tipOpacity = 1;
+                VM.tipNameTw = VM.pokemon[d.id]['NameTw'];
+                VM.tipNameEn = VM.pokemon[d.id]['NameEn'];
+                VM.tipOldAtk = VM.pokemon[d.id]['Old_BaseAtk'];
+                VM.tipOldDef = VM.pokemon[d.id]['Old_BaseDef'];
+                VM.tipOldSta = VM.pokemon[d.id]['Old_BaseSta'];
+                VM.tipOldCp = VM.pokemon[d.id]['Old_MaxCp'];
+                VM.tipAtk = VM.pokemon[d.id]['BaseAtk'];
+                VM.tipDef = VM.pokemon[d.id]['BaseDef'];
+                VM.tipSta = VM.pokemon[d.id]['BaseSta'];
+                VM.tipCp = VM.pokemon[d.id]['MaxCp'];
+                if(VM.pokemon[d.id]['BaseAtk'] > VM.pokemon[d.id]['Old_BaseAtk']){
+                    VM.atkColor = "#5aba3b";
+                }
+                else{
+                    VM.atkColor = "#b83128";
+                }
+                if(VM.pokemon[d.id]['BaseDef'] > VM.pokemon[d.id]['Old_BaseDef']){
+                    VM.defColor = "#5aba3b";
+                }
+                else{
+                    VM.defColor = "#b83128";
+                }
+                if(VM.pokemon[d.id]['BaseSta'] > VM.pokemon[d.id]['Old_BaseSta']){
+                    VM.staColor = "#5aba3b";
+                }
+                else{
+                    VM.staColor = "#b83128";
+                }
+                if(VM.pokemon[d.id]['MaxCp'] > VM.pokemon[d.id]['Old_MaxCp']){
+                    VM.cpColor = "#5aba3b";
+                }
+                else{
+                    VM.cpColor = "#b83128";
+                }
+            }
+
+            function handleMouseOut(d){
+                VM.tipOpacity = 0;
+            }
 
             var VM = new Vue({
                 el : '#change',
@@ -90,6 +189,23 @@
                     pokemon : '',
                     sortby : 'id',
                     databy : 'new',
+                    tipImg : '/image/pokemon_big/1.png',
+                    tipNameTw : '',
+                    tipNameEn : '',
+                    tipOpacity : 0,
+                    tipOldAtk : 0,
+                    tipOldDef : 0,
+                    tipOldSta : 0,
+                    tipOldCp : 0,
+                    tipAtk : 0,
+                    tipDef : 0,
+                    tipSta : 0,
+                    tipCp : 0,
+                    atkColor : '#000',
+                    defColor : '#000',
+                    staColor : '#000',
+                    cpColor : '#000',
+                    stackflag : false
                 },
                 created : function(){
 
@@ -108,12 +224,13 @@
                             data[i]['value'] = this.pokemon[i]['MaxCp'];
                             data[i]['name'] = this.pokemon[i]['NameEn'];
                             data[i]['id'] = this.pokemon[i]['PokemonId'];
+                            data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
                         }
 
-                        data.forEach(function(d) { d.value = +d.value; });
+                        // data.forEach(function(d) { d.value = +d.value; });
                         // data.sort(function(a, b) { return b.value - a.value; });
 
-                        x.domain([0, d3.max(data, function(d){ return d.value; })]);
+                        x.domain([0, 4760]);
                         y.domain(data.map(function(d){ return d.name; }));
 
                         yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
@@ -126,7 +243,10 @@
 
                         bar.append('rect')
                             .attr('width', function(d) { return x(d.value) })
-                            .attr('height', y.rangeBand());
+                            .attr('height', y.rangeBand())
+                            .attr('class', 'blue-bar')
+                            .on('mouseover', handleMouseOver)
+                            .on('mouseout', handleMouseOut);
 
                         bar.append("text")
                             .attr("class", "value")
@@ -168,124 +288,325 @@
                 methods : {
                     change : function(){
 
-                        if(this.databy == 'new'){
+                        if(this.databy == 'stack'){
+                            this.stackflag = true;
                             for(var i = 0; i < this.pokemon.length; i++){
                                 data[i] = {};
                                 data[i]['value'] = this.pokemon[i]['MaxCp'];
                                 data[i]['name'] = this.pokemon[i]['NameEn'];
                                 data[i]['id'] = this.pokemon[i]['PokemonId'];
+                                data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
                             }
+                            if(this.sortby == 'id'){
+                                data.sort(function(a, b) { return a.id - b.id; });
+                            }
+                            else{
+                                data.sort(function(a, b) { return b.value - a.value; });
+                            }
+
+                            x.domain([0, 4760]);
+                            y.domain(data.map(function(d){ return d.name; }));
+
+                            d3.selectAll('rect')
+                                .data(data)
+                                .transition()
+                                .duration(transition_time)
+                                .attr('width', function(d) {
+                                    if(d.Old_MaxCp > d.value){
+                                        return x(d.Old_MaxCp);
+                                    }
+                                    return x(d.value);
+                                 })
+                                .attr('height', y.rangeBand())
+                                .attr('class', function(d){
+                                    if(d.Old_MaxCp > d.value){
+                                        return 'red-bar';
+                                    }
+                                    return 'green-bar';
+                                });
+
+                            bar2 = svg.selectAll('g.bar2')
+                                .data(data)
+                                .enter().append('g')
+                                .attr('class', 'bar2')
+                                .attr('transform', function(d) { return 'translate(0,' + y(d.name) + ')'; });
+
+                            bar2.append('rect')
+                                .attr('width', function(d) {
+                                    if(d.Old_MaxCp < d.value){
+                                        return x(d.Old_MaxCp)
+                                    }
+                                    return x(d.value);
+                                })
+                                .attr('height', y.rangeBand())
+                                .attr('class', 'blue-bar')
+                                .on('mouseover', handleMouseOver)
+                                .on('mouseout', handleMouseOut);
+
+                            d3.selectAll('.value')
+                                .data(data)
+                                .transition()
+                                .duration(transition_time)
+                                .attr("x", function(d) {
+                                    if(d.Old_MaxCp > d.value){
+                                        return x(d.Old_MaxCp);
+                                    }
+                                    return x(d.value);
+                                })
+                                .attr("y", y.rangeBand() / 2)
+                                .attr("dx", -3)
+                                .attr("dy", ".35em")
+                                .style("display", "none")
+                                .text(function(d) {
+                                    if(d.Old_MaxCp > d.value){
+                                        return format(d.Old_MaxCp);
+                                    }
+                                    return format(d.value);
+                                });
+
+                            bar2.append("text")
+                                .attr("class", "value2")
+                                .attr("x", function(d) { return x(d.value); })
+                                .attr("y", y.rangeBand() / 2)
+                                .attr("dx", -3)
+                                .attr("dy", ".35em")
+                                .attr("text-anchor", "end")
+                                .style('fill', 'white')
+                                .text(function(d) { return format(d.value); });
+
+                            d3.selectAll('image')
+                                .data(data)
+                                .attr("xlink:href", function(d) { return  "image/pokemon/" + d.id + ".png"})
+                                .transition()
+                                .duration(transition_time)
+                                .attr("x", function(d) {
+                                    if(d.Old_MaxCp > d.value){
+                                        return x(d.Old_MaxCp);
+                                    }
+                                    return x(d.value);
+                                })
+                                .attr("y", y.rangeBand() / 2 - 24);
                         }
                         else{
-                            for(var i = 0; i < this.pokemon.length; i++){
-                                data[i] = {};
-                                data[i]['value'] = this.pokemon[i]['Old_MaxCp'];
-                                data[i]['name'] = this.pokemon[i]['NameEn'];
-                                data[i]['id'] = this.pokemon[i]['PokemonId'];
+                            if(this.stackflag == true){
+                                bar2.remove();
+                                stackflag = false;
                             }
+                            if(this.databy == 'new'){
+                                for(var i = 0; i < this.pokemon.length; i++){
+                                    data[i] = {};
+                                    data[i]['value'] = this.pokemon[i]['MaxCp'];
+                                    data[i]['name'] = this.pokemon[i]['NameEn'];
+                                    data[i]['id'] = this.pokemon[i]['PokemonId'];
+                                    data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
+                                }
+                            }
+                            else{
+                                for(var i = 0; i < this.pokemon.length; i++){
+                                    data[i] = {};
+                                    data[i]['value'] = this.pokemon[i]['Old_MaxCp'];
+                                    data[i]['name'] = this.pokemon[i]['NameEn'];
+                                    data[i]['id'] = this.pokemon[i]['PokemonId'];
+                                    data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
+                                }
+                            }
+
+                            if(this.sortby == 'id'){
+                                data.sort(function(a, b) { return a.id - b.id; });
+                            }
+                            else{
+                                data.sort(function(a, b) { return b.value - a.value; });
+                            }
+
+                            x.domain([0, 4760]);
+                            y.domain(data.map(function(d){ return d.name; }));
+
+                            d3.selectAll('rect')
+                                .data(data)
+                                .transition()
+                                .duration(transition_time)
+                                .attr('width', function(d) { return x(d.value) })
+                                .attr('height', y.rangeBand())
+                                .attr('class', 'blue-bar');
+
+                            d3.selectAll('.value')
+                                .data(data)
+                                .transition()
+                                .duration(transition_time)
+                                .attr("x", function(d) { return x(d.value); })
+                                .attr("y", y.rangeBand() / 2)
+                                .attr("dx", -3)
+                                .attr("dy", ".35em")
+                                .style('fill', 'white')
+                                .style('display', 'block')
+                                .text(function(d) { return format(d.value); });
+
+                            d3.selectAll('image')
+                                .data(data)
+                                .attr("xlink:href", function(d) { return  "image/pokemon/" + d.id + ".png"})
+                                .transition()
+                                .duration(transition_time)
+                                .attr("x", function(d) { return x(d.value); })
+                                .attr("y", y.rangeBand() / 2 - 24);
+
+
+                            d3.selectAll('.y')
+                                .transition()
+                                .duration(transition_time)
+                                .call(yAxis);
                         }
 
-                        if(this.sortby == 'id'){
-                            data.sort(function(a, b) { return a.id - b.id; });
-                        }
-                        else{
-                            data.sort(function(a, b) { return b.value - a.value; });
-                        }
-
-                        x.domain([0, d3.max(data, function(d){ return d.value; })]);
-                        y.domain(data.map(function(d){ return d.name; }));
-
-                        d3.selectAll('rect')
-                            .data(data)
-                            .transition()
-                            .duration(transition_time)
-                            .attr('width', function(d) { return x(d.value) })
-                            .attr('height', y.rangeBand());
-
-                        d3.selectAll('.value')
-                            .data(data)
-                            .transition()
-                            .duration(transition_time)
-                            .attr("x", function(d) { return x(d.value); })
-                            .attr("y", y.rangeBand() / 2)
-                            .attr("dx", -3)
-                            .attr("dy", ".35em")
-                            .text(function(d) { return format(d.value); });
-
-                        d3.selectAll('image')
-                            .data(data)
-                            .attr("xlink:href", function(d) { return  "image/pokemon/" + d.id + ".png"})
-                            .transition()
-                            .duration(transition_time)
-                            .attr("x", function(d) { return x(d.value); })
-                            .attr("y", y.rangeBand() / 2 - 24);
-
-
-                        d3.selectAll('.y')
-                            .transition()
-                            .duration(transition_time)
-                            .call(yAxis);
                     },
                     sort : function(){
-
-                        if(this.databy == 'new'){
+                        if(this.databy == 'stack'){
+                            this.stackflag = true;
                             for(var i = 0; i < this.pokemon.length; i++){
                                 data[i] = {};
                                 data[i]['value'] = this.pokemon[i]['MaxCp'];
                                 data[i]['name'] = this.pokemon[i]['NameEn'];
                                 data[i]['id'] = this.pokemon[i]['PokemonId'];
+                                data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
                             }
+                            console.log(data);
+                            if(this.sortby == 'id'){
+                                data.sort(function(a, b) { return a.id - b.id; });
+                            }
+                            else{
+                                data.sort(function(a, b) { return b.value - a.value; });
+                            }
+                            console.log(data);
+                            x.domain([0, 4760]);
+                            y.domain(data.map(function(d){ return d.name; }));
+
+                            d3.selectAll('.bar rect')
+                                .data(data)
+                                .transition()
+                                .duration(transition_time)
+                                .attr('width', function(d) {
+                                    if(d.Old_MaxCp > d.value){
+                                        return x(d.Old_MaxCp);
+                                    }
+                                    return x(d.value);
+                                 })
+                                .attr('height', y.rangeBand())
+                                .attr('class', function(d){
+                                    if(d.Old_MaxCp > d.value){
+                                        return 'red-bar';
+                                    }
+                                    return 'green-bar';
+                                });
+
+                            svg.selectAll('.bar2 rect')
+                                .data(data)
+                                .transition()
+                                .duration(transition_time)
+                                .attr('width', function(d) {
+                                    if(d.Old_MaxCp < d.value){
+                                        return x(d.Old_MaxCp)
+                                    }
+                                    return x(d.value);
+                                })
+                                .attr('height', y.rangeBand())
+                                .attr('class', 'blue-bar');
+
+                            d3.selectAll('.value2')
+                                .data(data)
+                                .transition()
+                                .duration(transition_time)
+                                .attr("x", function(d) {
+                                    if(d.Old_MaxCp > d.value){
+                                        return x(d.Old_MaxCp)
+                                    }
+                                    return x(d.value);
+                                })
+                                .attr("y", y.rangeBand() / 2)
+                                .attr("dx", -3)
+                                .attr("dy", ".35em")
+                                .text(function(d) {
+                                    if(d.Old_MaxCp > d.value){
+                                        return format(d.Old_MaxCp)
+                                    }
+                                    return format(d.value);
+                                });
+
+                            d3.selectAll('image')
+                                .data(data)
+                                .attr("xlink:href", function(d) { return  "image/pokemon/" + d.id + ".png"})
+                                .transition()
+                                .duration(transition_time)
+                                .attr("x", function(d) {
+                                    if(d.Old_MaxCp > d.value){
+                                        return x(d.Old_MaxCp)
+                                    }
+                                    return x(d.value);
+                                })
+                                .attr("y", y.rangeBand() / 2 - 24);
+
                         }
                         else{
-                            for(var i = 0; i < this.pokemon.length; i++){
-                                data[i] = {};
-                                data[i]['value'] = this.pokemon[i]['Old_MaxCp'];
-                                data[i]['name'] = this.pokemon[i]['NameEn'];
-                                data[i]['id'] = this.pokemon[i]['PokemonId'];
+                            if(this.stackflag == true){
+                                bar2.remove();
                             }
+                            if(this.databy == 'new'){
+                                for(var i = 0; i < this.pokemon.length; i++){
+                                    data[i] = {};
+                                    data[i]['value'] = this.pokemon[i]['MaxCp'];
+                                    data[i]['name'] = this.pokemon[i]['NameEn'];
+                                    data[i]['id'] = this.pokemon[i]['PokemonId'];
+                                    data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
+                                }
+                            }
+                            else{
+                                for(var i = 0; i < this.pokemon.length; i++){
+                                    data[i] = {};
+                                    data[i]['value'] = this.pokemon[i]['Old_MaxCp'];
+                                    data[i]['name'] = this.pokemon[i]['NameEn'];
+                                    data[i]['id'] = this.pokemon[i]['PokemonId'];
+                                    data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
+                                }
+                            }
+
+                            if(this.sortby == 'id'){
+                                data.sort(function(a, b) { return a.id - b.id; });
+                            }
+                            else{
+                                data.sort(function(a, b) { return b.value - a.value; });
+                            }
+
+                            x.domain([0, 4760]);
+                            y.domain(data.map(function(d){ return d.name; }));
+
+                            d3.selectAll('rect')
+                                .data(data)
+                                .transition()
+                                .duration(transition_time)
+                                .attr('width', function(d) { return x(d.value) })
+                                .attr('height', y.rangeBand());
+
+                            d3.selectAll('.value')
+                                .data(data)
+                                .transition()
+                                .duration(transition_time)
+                                .attr("x", function(d) { return x(d.value); })
+                                .attr("y", y.rangeBand() / 2)
+                                .attr("dx", -3)
+                                .attr("dy", ".35em")
+                                .text(function(d) { return format(d.value); });
+
+                            d3.selectAll('image')
+                                .data(data)
+                                .attr("xlink:href", function(d) { return  "image/pokemon/" + d.id + ".png"})
+                                .transition()
+                                .duration(transition_time)
+                                .attr("x", function(d) { return x(d.value); })
+                                .attr("y", y.rangeBand() / 2 - 24);
+
+
+                            d3.selectAll('.y')
+                                .transition()
+                                .duration(transition_time)
+                                .call(yAxis);
                         }
-
-                        if(this.sortby == 'id'){
-                            data.sort(function(a, b) { return a.id - b.id; });
-                        }
-                        else{
-                            data.sort(function(a, b) { return b.value - a.value; });
-                        }
-
-                        x.domain([0, d3.max(data, function(d){ return d.value; })]);
-                        y.domain(data.map(function(d){ return d.name; }));
-
-                        d3.selectAll('rect')
-                            .data(data)
-                            .transition()
-                            .duration(transition_time)
-                            .attr('width', function(d) { return x(d.value) })
-                            .attr('height', y.rangeBand());
-
-                        d3.selectAll('.value')
-                            .data(data)
-                            .transition()
-                            .duration(transition_time)
-                            .attr("x", function(d) { return x(d.value); })
-                            .attr("y", y.rangeBand() / 2)
-                            .attr("dx", -3)
-                            .attr("dy", ".35em")
-                            .text(function(d) { return format(d.value); });
-
-                        d3.selectAll('image')
-                            .data(data)
-                            .attr("xlink:href", function(d) { return  "image/pokemon/" + d.id + ".png"})
-                            .transition()
-                            .duration(transition_time)
-                            .attr("x", function(d) { return x(d.value); })
-                            .attr("y", y.rangeBand() / 2 - 24);
-
-
-                        d3.selectAll('.y')
-                            .transition()
-                            .duration(transition_time)
-                            .call(yAxis);
-
 
                     }
                 }
