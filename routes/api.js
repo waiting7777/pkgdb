@@ -39,7 +39,8 @@ router.get('/pokemon/:id', function(req, res, next) {
     if(id == 0){
         Pokemon.find({}, { __v : 0, _id : 0}).sort({ PokemonId : 1 }).exec(function(err, pokemons){
             if(err) throw err;
-
+            
+            res.setHeader('Access-Control-Allow-Origin','*');
             res.send(pokemons);
             return;
         });
