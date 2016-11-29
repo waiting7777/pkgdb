@@ -191,7 +191,7 @@
 
             function handleMouseOver(d){
 
-                VM.tipImg = '/image/pokemon_big/' + d.id + '.png';
+                VM.tipImg = 'image/pokemon_big/' + d.id + '.png';
                 VM.tipOpacity = 1;
                 VM.tipObj = VM.pokemon[d.id-1];
                 VM.atkColor = colorCheck(VM.tipObj['BaseAtk'], VM.tipObj['Old_BaseAtk']);
