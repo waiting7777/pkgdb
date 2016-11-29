@@ -17,7 +17,7 @@ var https = require('https');
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-app.set('httpsport', 8080);
+app.set('httpsport', 80);
 
 /**
  * Create HTTP server.
