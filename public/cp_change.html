@@ -74,6 +74,17 @@
                 font-size: 16px;
                 margin-top: 12px;
             }
+            .little-title{
+                font-weight: bold;
+                margin-top: 32px;
+                font-size: 24px;
+            }
+            blockquote{
+                margin-top: 24px;
+            }
+            input, label{
+                font-size: 16px;
+            }
             #text-contain{
                 margin-bottom: 32px;
             }
@@ -86,9 +97,20 @@
         <div class="container row" id="change">
             <div class="col-md-1"></div>
             <div class="col-md-10" id="text-contain">
+                <div class="little-title">Vue.js + d3.js</div>
+                <div class="text"></div>
                 <div class="text">2016/11/22 N社把所有神奇寶貝的基礎三維都做了調整</div>
-                <div class="text">試做圖表呈現 調整後的每隻神奇寶貝的狀態</div>
-                <div class="text">以及呈現 每隻 buff/nerf的多寡</div>
+                <div class="text">以圖表呈現 調整後的每隻神奇寶貝的狀態</div>
+                <div class="text">以及每隻 buff/nerf的多寡</div>
+                <hr>
+                <div class="text">Buff最多 : 胡地 鐵甲暴龍, 鐵甲暴龍buff後 cp 排名第五,可以成為一線戰力.</div>
+                <div class="text">Nerf最多 : 大舌頭 胖可丁, 躺著也中槍.</div>
+                <hr>
+                <div class="text">因為 Vue.js 等現代框架皆採用 virtual DOM, d3.js 的 select 要接在 create 之後才找得到 dom.</div>
+                <div class="text">Vue.js 的 lifecycle 監測方式,讓 event and function handle 比 jquery 時代要快速很多.</div>
+                <blockquote cite="https://drive.google.com/file/d/0B5dWT-mTs7EcM3U0NDRKVnhJdm8/view">
+                    <a href="blockquote">資料來源</a>
+                </blockquote>
             </div>
             <div class="col-md-2"></div>
             <div class="col-md-4">
@@ -98,6 +120,9 @@
                 <br>
                 <input type="radio" id="by-cp" value="cp" v-model="sortby">
                 <label for="by-cp">by cp</label>
+                <br>
+                <input type="radio" id="by-amount" value="amount" v-model="sortby">
+                <label for="by-amount">by buff/nerf amount</label>
             </div>
             <div class="col-md-4">
                 <div>Data : </div>
@@ -119,16 +144,16 @@
                     <div>{{ tipObj.NameEn }}</div>
                 </div>
                 <div id="atk">
-                    <span>ATK : {{tipObj.Old_BaseAtk}} => </span><span v-bind:style="{ color : atkColor }">{{tipObj.BaseAtk}}</span>
+                    <span>ATK : {{tipObj.Old_BaseAtk}} => </span><span v-bind:style="{ color : atkColor }">{{tipObj.BaseAtk}}</span><span v-bind:style="{ color : atkColor }"> ({{tipObj.BaseAtk - tipObj.Old_BaseAtk}})</span>
                 </div>
                 <div id="def">
-                    <span>DEF : {{tipObj.Old_BaseDef}} => </span><span v-bind:style="{ color : defColor }">{{tipObj.BaseDef}}</span>
+                    <span>DEF : {{tipObj.Old_BaseDef}} => </span><span v-bind:style="{ color : defColor }">{{tipObj.BaseDef}}</span><span v-bind:style="{ color : defColor }"> ({{tipObj.BaseDef - tipObj.Old_BaseDef}})</span>
                 </div>
                 <div id="sta">
-                    <span>STA : {{tipObj.Old_BaseSta}} => </span><span v-bind:style="{ color : staColor }">{{tipObj.BaseSta}}</span>
+                    <span>STA : {{tipObj.Old_BaseSta}} => </span><span v-bind:style="{ color : staColor }">{{tipObj.BaseSta}}</span><span v-bind:style="{ color : staColor }"> ({{tipObj.BaseSta - tipObj.Old_BaseSta}})</span>
                 </div>
                 <div id="cp">
-                    <span>Max Cp : {{tipObj.Old_MaxCp}} => </span><span v-bind:style="{ color : cpColor }">{{tipObj.MaxCp}}</span>
+                    <span>Max Cp : {{tipObj.Old_MaxCp}} => </span><span v-bind:style="{ color : cpColor }">{{tipObj.MaxCp}}</span><span v-bind:style="{ color : cpColor }"> ({{tipObj.MaxCp - tipObj.Old_MaxCp}})</span>
                 </div>
             </div>
 
@@ -186,6 +211,7 @@
                     pokemon : '',
                     sortby : 'id',
                     databy : 'new',
+                    showby : 'the-cp',
                     tipImg : '/image/pokemon_big/1.png',
                     tipObj : {},
                     tipOpacity : 0,
@@ -193,7 +219,8 @@
                     defColor : '#000',
                     staColor : '#000',
                     cpColor : '#000',
-                    stackflag : false
+                    stackflag : false,
+                    disableflag : false
                 },
                 created : function(){
 
@@ -281,12 +308,17 @@
                             for(var i = 0; i < this.pokemon.length; i++){
                                 data[i] = {};
                                 data[i]['value'] = this.pokemon[i]['MaxCp'];
+                                data[i]['MaxCp'] = this.pokemon[i]['MaxCp'];
                                 data[i]['name'] = this.pokemon[i]['NameEn'];
                                 data[i]['id'] = this.pokemon[i]['PokemonId'];
                                 data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
                             }
+                            console.log(data);
                             if(this.sortby == 'id'){
                                 data.sort(function(a, b) { return a.id - b.id; });
+                            }
+                            else if(this.sortby == 'amount'){
+                                data.sort(function(a, b){ return (a.Old_MaxCp - a.MaxCp) - (b.Old_MaxCp - b.MaxCp)});
                             }
                             else{
                                 data.sort(function(a, b) { return b.value - a.value; });
@@ -384,6 +416,7 @@
                                 for(var i = 0; i < this.pokemon.length; i++){
                                     data[i] = {};
                                     data[i]['value'] = this.pokemon[i]['MaxCp'];
+                                    data[i]['MaxCp'] = this.pokemon[i]['MaxCp'];
                                     data[i]['name'] = this.pokemon[i]['NameEn'];
                                     data[i]['id'] = this.pokemon[i]['PokemonId'];
                                     data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
@@ -393,6 +426,7 @@
                                 for(var i = 0; i < this.pokemon.length; i++){
                                     data[i] = {};
                                     data[i]['value'] = this.pokemon[i]['Old_MaxCp'];
+                                    data[i]['MaxCp'] = this.pokemon[i]['MaxCp'];
                                     data[i]['name'] = this.pokemon[i]['NameEn'];
                                     data[i]['id'] = this.pokemon[i]['PokemonId'];
                                     data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
@@ -401,6 +435,9 @@
 
                             if(this.sortby == 'id'){
                                 data.sort(function(a, b) { return a.id - b.id; });
+                            }
+                            else if(this.sortby == 'amount'){
+                                data.sort(function(a, b){ return (a.Old_MaxCp - a.MaxCp) - (b.Old_MaxCp - b.MaxCp)});
                             }
                             else{
                                 data.sort(function(a, b) { return b.value - a.value; });
@@ -451,13 +488,16 @@
                             for(var i = 0; i < this.pokemon.length; i++){
                                 data[i] = {};
                                 data[i]['value'] = this.pokemon[i]['MaxCp'];
+                                data[i]['MaxCp'] = this.pokemon[i]['MaxCp'];
                                 data[i]['name'] = this.pokemon[i]['NameEn'];
                                 data[i]['id'] = this.pokemon[i]['PokemonId'];
                                 data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
                             }
-                            console.log(data);
                             if(this.sortby == 'id'){
                                 data.sort(function(a, b) { return a.id - b.id; });
+                            }
+                            else if(this.sortby == 'amount'){
+                                data.sort(function(a, b){ return (a.Old_MaxCp - a.MaxCp) - (b.Old_MaxCp - b.MaxCp)});
                             }
                             else{
                                 data.sort(function(a, b) { return b.value - a.value; });
@@ -534,6 +574,7 @@
                                 for(var i = 0; i < this.pokemon.length; i++){
                                     data[i] = {};
                                     data[i]['value'] = this.pokemon[i]['MaxCp'];
+                                    data[i]['MaxCp'] = this.pokemon[i]['MaxCp'];
                                     data[i]['name'] = this.pokemon[i]['NameEn'];
                                     data[i]['id'] = this.pokemon[i]['PokemonId'];
                                     data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
@@ -543,6 +584,7 @@
                                 for(var i = 0; i < this.pokemon.length; i++){
                                     data[i] = {};
                                     data[i]['value'] = this.pokemon[i]['Old_MaxCp'];
+                                    data[i]['MaxCp'] = this.pokemon[i]['MaxCp'];
                                     data[i]['name'] = this.pokemon[i]['NameEn'];
                                     data[i]['id'] = this.pokemon[i]['PokemonId'];
                                     data[i]['Old_MaxCp'] = this.pokemon[i]['Old_MaxCp'];
@@ -551,6 +593,9 @@
 
                             if(this.sortby == 'id'){
                                 data.sort(function(a, b) { return a.id - b.id; });
+                            }
+                            else if(this.sortby == 'amount'){
+                                data.sort(function(a, b){ return (a.Old_MaxCp - a.MaxCp) - (b.Old_MaxCp - b.MaxCp)});
                             }
                             else{
                                 data.sort(function(a, b) { return b.value - a.value; });
