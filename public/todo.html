@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>Todo List</title>
+
+        <script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <style media="screen">
+            .page-header{
+                padding-bottom: 20px;
+            }
+            #list{
+                width: 300px;
+                box-shadow: 0 0 6px rgba(0,0,0,0.27);
+            }
+            .todo-list{
+                list-style: none;
+            }
+            .todo-list input{
+                width: 40px;
+                position: absolute;
+                top: 20px;
+                left: -20px;
+            }
+            .item{
+                position: relative;
+            }
+            label{
+                font-size: 21px;
+                padding: 15px 60px 15px 15px;
+                display: block;
+            }
+            .todo-list li .destroy {
+            	display: none;
+            	position: absolute;
+            	top: 0;
+            	right: 10px;
+            	bottom: 0;
+            	width: 40px;
+            	height: 40px;
+            	margin: auto 0;
+            	font-size: 30px;
+                line-height: 30px;
+            	color: #cc9a9a;
+            	transition: color 0.2s ease-out;
+            }
+
+            .todo-list li .destroy:hover {
+            	color: #af5b5e;
+            }
+
+            .todo-list li .destroy:after {
+            	content: '×';
+            }
+
+            .todo-list li:hover .destroy {
+            	display: block;
+            }
+        </style>
+
+    </head>
+    <body>
+        <div id="todo-app" class="container">
+            <div class="page-header">
+                <h1>Todo</h1>
+                <input type="text">
+                <button>Add to Todo List</button>
+            </div>
+            <div id="list">
+                <ul class="todo-list">
+                    <li class="item" v-for="todo in todos">
+                        <input type="checkbox">
+                        <label>{{ todo }}</label>
+                        <span class="destroy"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <script>
+
+            var VM = new Vue({
+                el: '#todo-app',
+                data: {
+                    todos: ['123', '456']
+                }
+            })
+        </script>
+    </body>
+</html>
