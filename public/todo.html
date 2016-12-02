@@ -75,6 +75,10 @@
             .todo-list li:hover .destroy {
             	display: block;
             }
+
+            .text-contain{
+                margin-top: 20px;
+            }
         </style>
 
     </head>
@@ -99,6 +103,11 @@
                     </li>
                 </ul>
             </div>
+            <div class="footer" v-show="todos.length" v-cloak>
+                <span class="todo-count">
+                    <strong>{{ remaining }}</strong> {{ remaining | pluralize }} left
+                </span>
+            </div>
             <div class="text-contain">
                 <p>--Double Click for Edit</p>
             </div>
@@ -118,6 +127,16 @@
                     ],
                     newTodo : '',
                     focused : true
+                },
+                computed : {
+                    remaining : function(){
+                        return this.todos.length;
+                    }
+                },
+                filters: {
+                    pluralize: function (n) {
+                        return n === 1 ? 'item' : 'items'
+                    }
                 },
                 methods:{
                     addTodo : function(){
