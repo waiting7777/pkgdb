@@ -14,7 +14,7 @@
                 padding-bottom: 20px;
             }
             #list{
-                width: 300px;
+                width: 600px;
                 box-shadow: 0 0 6px rgba(0,0,0,0.27);
             }
             .todo-list{
@@ -75,7 +75,46 @@
             .todo-list li:hover .destroy {
             	display: block;
             }
+            .footer{
+                position: relative;
+                width: 600px;
+            	color: #777;
+                height: 40px;
+                margin-top: 16px;
+            	padding: 10px 15px;
+            	text-align: center;
+            	border: 1px solid #e6e6e6;
+            }
+            .todo-count {
+                float: left;
+                text-align: left;
+            }
+            .filters {
+                margin: 0;
+                padding: 0;
+                list-style: none;
+                position: absolute;
+                right: 0;
+                left: 0;
+            }
+            .filters li {
+                display: inline;
+            }
+            .filters li a {
+                color: inherit;
+                margin: 3px;
+                padding: 3px 7px;
+                text-decoration: none;
+                border: 1px solid transparent;
+                border-radius: 3px;
+            }
+            .filters li a:hover {
+            	border-color: rgba(175, 47, 47, 0.1);
+            }
 
+            .filters li a.selected {
+            	border-color: rgba(175, 47, 47, 0.2);
+            }
             .text-contain{
                 margin-top: 20px;
             }
@@ -107,6 +146,11 @@
                 <span class="todo-count">
                     <strong>{{ remaining }}</strong> {{ remaining | pluralize }} left
                 </span>
+                <ul class="filters">
+                    <li><a href="#/all" :class="{ selected: visibility == 'all' }">All</a></li>
+                    <li><a href="#/active" :class="{ selected: visibility == 'active' }">Active</a></li>
+                    <li><a href="#/completed" :class="{ selected: visibility == 'completed' }">Completed</a></li>
+                </ul>
             </div>
             <div class="text-contain">
                 <p>--Double Click for Edit</p>
@@ -126,7 +170,8 @@
                           done : false }
                     ],
                     newTodo : '',
-                    focused : true
+                    focused : true,
+                    visibility : 'all'
                 },
                 computed : {
                     remaining : function(){
