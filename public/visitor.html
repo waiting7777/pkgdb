@@ -137,7 +137,7 @@
             }];
 
 
-            function log(user_id, type, time){
+            function create_log(user_id, type, time){
 
                 logs.push({
                     user_id:user_id,
@@ -147,56 +147,79 @@
 
             }
 
+            function update_log(){
+
+            }
+
+            function delete_log(){
+                
+            }
+
 
 
             function max_vistors(time_start, time_end){
 
-                let vistors_in_building = {};
-                let max=0;
+               let vistors_in_building = {};
+               let max=0;
 
 
-                logs.sort(function(a, b){
-                    return a.time - b.time;
-                });
+               logs.sort(function(a, b){
+                   return a.time - b.time;
+               });
 
-                console.log(logs);
+               console.log(logs);
 
-                let _count =function(){
-                    let c=0;
-                    for(let user_id in vistors_in_building){
-                        c++;
-                    }
+               let _count =function(){
+                   let c=0;
+                   for(let user_id in vistors_in_building){
+                       c++;
+                   }
 
-                    return c;
-                };
+                   return c;
+               };
 
-                for(let i=0,imax=logs.length; i<imax; i++){
-                    let l = logs[i];
+               for(let i=0,imax=logs.length; i<imax; i++){
+                   let l = logs[i];
 
-                    if(l.time <= time_end){
-                        if(l.type === 'arrival'){
-                            vistors_in_building[l.user_id] = l.time;
-                        }
+                   if(l.time <= time_start && l.type === 'departure'){
+                       delete vistors_in_building[l.user_id];
+                   }
 
-                        if(l.type === 'departure'){
-                            delete vistors_in_building[l.user_id];
-                        }
-                    }
 
-                    if( l.time >= time_start && l.time <= time_end){
-                        num = _count();
-                        max = Math.max(max, num);
-                    }
-                }
-                return max;
-            }
+                   if(l.time <= time_end && l.type === 'arrival'){
+                       vistors_in_building[l.user_id] = l.time;
+                   }
+
+
+
+                   if( l.time >= time_start && l.time <= time_end){
+                       num = _count();
+                       max = Math.max(max, num);
+                   }
+               }
+               return max;
+           }
 
             VM = new Vue({
                 el : '#visitor',
                 data : {
                     logs : [],
-                    starttime : {},
-                    endtime : {},
+                    starttime : {
+                        year : 2016,
+                        month : 12,
+                        day : 5,
+                        hour : 14,
+                        minute : 00,
+                        second : 00
+                    },
+                    endtime : {
+                        year : 2016,
+                        month : 12,
+                        day : 5,
+                        hour : 17,
+                        minute : 00,
+                        second : 00
+                    },
                     max : 0
                 },
                 created : function(){
@@ -222,7 +245,6 @@
                         e = new Date(this.endtime.year, this.endtime.month-1, this.endtime.day, this.endtime.hour, this.endtime.minute, this.endtime.second);
                         end_time = e.getTime();
                         console.log(start_time, end_time);
-                        console.log(max_vistors(start_time, end_time));
                         this.max = max_vistors(start_time, end_time);
                     }
                 }
