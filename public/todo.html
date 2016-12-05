@@ -115,6 +115,31 @@
             .filters li a.selected {
             	border-color: rgba(175, 47, 47, 0.2);
             }
+            .clear-completed,
+            html .clear-completed:active {
+            	float: right;
+            	position: relative;
+            	line-height: 20px;
+            	text-decoration: none;
+            	cursor: pointer;
+                margin: 0;
+            	padding: 0;
+            	border: 0;
+            	background: none;
+            	font-size: 100%;
+            	vertical-align: baseline;
+            	font-family: inherit;
+            	font-weight: inherit;
+            	color: inherit;
+            	-webkit-appearance: none;
+            	appearance: none;
+            	-webkit-font-smoothing: antialiased;
+            	-moz-osx-font-smoothing: grayscale;
+            }
+
+            .clear-completed:hover {
+            	text-decoration: underline;
+            }
             .text-contain{
                 margin-top: 20px;
             }
@@ -124,13 +149,13 @@
     <body>
         <div id="todo-app" class="container">
             <div class="page-header">
-                <h1>Todo</h1>
+                <h1>Todo List</h1>
                 <input type="text" v-model="newTodo">
                 <button @click="addTodo">Add to Todo List</button>
             </div>
             <div id="list">
                 <ul class="todo-list">
-                    <li class="item" v-for="todo in todos" :class="{ completed: todo.done }">
+                    <li class="item" v-for="todo in filteredTodos" :class="{ completed: todo.done }">
                         <input type="checkbox" v-model="todo.done" class="check" v-bind:class="{ hidden : !todo.hidden }">
                         <label @dblclick="editTodo(todo)" v-bind:class="{ hidden : !todo.hidden }">{{ todo.text }}</label>
                         <span class="destroy" @click="removeTodo(todo)"></span>
@@ -151,6 +176,9 @@
                     <li><a href="#/active" :class="{ selected: visibility == 'active' }">Active</a></li>
                     <li><a href="#/completed" :class="{ selected: visibility == 'completed' }">Completed</a></li>
                 </ul>
+                <button class="clear-completed" @click="removeCompleted" v-show="todos.length > remaining">
+                    Clear completed
+                </button>
             </div>
             <div class="text-contain">
                 <p>--Double Click for Edit</p>
@@ -158,24 +186,61 @@
         </div>
         <script>
 
+        var STORAGE_KEY = 'todos-list'
+        var todoStorage = {
+            fetch: function () {
+                var todos = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+                todos.forEach(function (todo, index) {
+                  todo.id = index
+                })
+                todoStorage.uid = todos.length
+                return todos
+                },
+                save: function (todos) {
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos))
+                }
+        }
+
+            var filters = {
+                all: function (todos) {
+                    return todos
+                },
+                active: function (todos) {
+                    return todos.filter(function (todo) {
+                        return !todo.done
+                    })
+                },
+                completed: function (todos) {
+                    return todos.filter(function (todo) {
+                        return todo.done
+                    })
+                }
+            }
+
             var VM = new Vue({
                 el: '#todo-app',
                 data: {
-                    todos: [
-                        { text : '123',
-                          hidden : true,
-                          done : false },
-                        { text : '456',
-                          hidden : true,
-                          done : false }
-                    ],
+                    todos: todoStorage.fetch(),
+                    abc : function(){
+                        return 5;
+                    },
                     newTodo : '',
-                    focused : true,
                     visibility : 'all'
                 },
+                watch: {
+                    todos: {
+                        handler: function (todos) {
+                            todoStorage.save(todos)
+                        },
+                            deep: true
+                        }
+                    },
                 computed : {
+                    filteredTodos: function () {
+                        return filters[this.visibility](this.todos)
+                    },
                     remaining : function(){
-                        return this.todos.length;
+                        return filters["active"](this.todos).length;
                     }
                 },
                 filters: {
@@ -202,6 +267,9 @@
                     },
                     removeTodo : function(todo){
                         this.todos.splice(this.todos.indexOf(todo), 1);
+                    },
+                    removeCompleted: function () {
+                        this.todos = filters.active(this.todos)
                     }
                 },
                 directives: {
@@ -211,7 +279,20 @@
                         }
                     }
                 }
-            })
+            });
+            function onHashChange () {
+                var visibility = window.location.hash.replace(/#\/?/, '')
+                if (visibility) {
+                    VM.visibility = visibility
+                } else {
+                window.location.hash = ''
+                    VM.visibility = 'all'
+                }
+            }
+
+            window.addEventListener('hashchange', onHashChange);
+            onHashChange();
+
         </script>
     </body>
 </html>
