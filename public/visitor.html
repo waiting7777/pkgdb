@@ -245,18 +245,17 @@
                          break;
                     }
 
+                    if( l.time >= time_start){
+                         max = Math.max(max, _count() );
+                    }
 
                     if(l.type === 'departure'){
                          delete vistors_in_building[l.user_id];
                     }
 
-
-
                     if(l.type === 'arrival'){
                          vistors_in_building[l.user_id] = l.time;
                     }
-
-
 
                     if( l.time >= time_start){
                          max = Math.max(max, _count() );
