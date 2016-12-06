@@ -16,6 +16,12 @@
             input{
                 width: 50px;
             }
+            .answer{
+                font-size: 21px;
+                font-weight: bold;
+                color: #FF6666;
+                margin-left: 12px;
+            }
         </style>
 
     </head>
@@ -25,25 +31,79 @@
                 <div class="col-md-12" id="vistor-stat">
                     <br>
                     <p>訪客記錄</p>
+                    <div>Sort : </div>
+                    <input type="radio" id="by-id" value="id" v-model="sortby">
+                    <label for="by-id">by id</label>
+                    <br>
+                    <input type="radio" id="by-type" value="type" v-model="sortby">
+                    <label for="by-type">by type</label>
+                    <br>
+                    <input type="radio" id="by-time" value="time" v-model="sortby">
+                    <label for="by-time">by time</label>
                     <table class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
                                 <td>user_id</td>
-                                <td>arrival</td>
-                                <td>departure</td>
+                                <td>type</td>
+                                <td>time</td>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="visitor in logs">
                                 <td>{{visitor.user_id}}</td>
-                                <td>{{visitor.arrival}}</td>
-                                <td>{{visitor.departure}}</td>
+                                <td>{{visitor.type}}</td>
+                                <td>{{show_string(visitor.time)}}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
                 <div class="col-md-12">
-                    <p>輸入查詢時間範圍</p>
+                    <br>
+                    <p>Create : </p>
+                    <p>DB Schema :</p>
+                    <p>{user_id : number, type : string, time : date}</p>
+                    <input type="text" v-model="create.user_id">
+                    <label for="">user_id</label>
+                    <select type="text" v-model="create.type">
+                        <option>arrival</option>
+                        <option>departure</option>
+                    </select>
+                    <label for="">type</label>
+                    <br>
+                    <input type="text" v-model="create.year">
+                    <label for="">年</label>
+                    <input type="text" v-model="create.month">
+                    <label for="">月</label>
+                    <input type="text" v-model="create.day">
+                    <label for="">日</label>
+                    <input type="text" v-model="create.hour">
+                    <label for="">時</label>
+                    <input type="text" v-model="create.minute">
+                    <label for="">分</label>
+                    <input type="text" v-model="create.second">
+                    <label for="">秒</label>
+                    <br>
+                    <br>
+                    <button class="btn btn-danger" v-on:click="add">Create</button>
+                </div>
+                <div class="col-md-12">
+                    <br>
+                    <p>Delete : </p>
+                    <input type="text" v-model="del.user_id">
+                    <label for="">user_id</label>
+                    <select type="text" v-model="del.type">
+                        <option>arrival</option>
+                        <option>departure</option>
+                    </select>
+                    <label for="">type</label>
+                    <br>
+                    <br>
+                    <button class="btn btn-danger" v-on:click="deleteLog">Delete</button>
+                </div>
+                <div class="col-md-12">
+                    <br>
+                    <br>
+                    <p>輸入查詢時間範圍 EX:</p>
                     <div class="col-md-12">
                         起 :
                         <input type="text" v-model="starttime.year">
@@ -80,7 +140,7 @@
                     <button class="btn btn-primary" v-on:click="caculate">Caculate</button>
                     <br style="clear:both;">
                     <br>
-                    <p>max visitor in time periods is {{max}}</p>
+                    <p>max visitor in time periods is <span class="answer">{{max}}</span></p>
                 </div>
             </div>
         </div>
@@ -136,7 +196,6 @@
                 time : 1480910400000
             }];
 
-
             function create_log(user_id, type, time){
 
                 logs.push({
@@ -147,15 +206,15 @@
 
             }
 
-            function update_log(){
+            function delete_log(user_id, type){
+
+                for(var i in logs){
+                    if(logs[i]['user_id'] == user_id && logs[i]['type'] == type){
+                        logs.splice(i, 1);
+                    }
+                }
 
             }
-
-            function delete_log(){
-
-            }
-
-
 
             function max_vistors(time_start, time_end){
 
@@ -166,7 +225,7 @@
                logs.sort(function(a, b){
                    return a.time - b.time;
                });
-
+                VM.sortby = 'time';
                console.log(logs);
 
                let _count =function(){
@@ -185,18 +244,16 @@
                        delete vistors_in_building[l.user_id];
                    }
 
-
                    if(l.time <= time_end && l.type === 'arrival'){
                        vistors_in_building[l.user_id] = l.time;
                    }
-
-
 
                    if( l.time >= time_start && l.time <= time_end){
                        num = _count();
                        max = Math.max(max, num);
                    }
                }
+
                return max;
            }
 
@@ -220,25 +277,36 @@
                         minute : 00,
                         second : 00
                     },
-                    max : ''
+                    max : '',
+                    create : {
+                        type : 'arrival'
+                    },
+                    del : {
+                        type : 'arrival'
+                    },
+                    sortby : 'id'
                 },
                 created : function(){
-                    for(var i in logs){
-                        if(!this.logs[logs[i]['user_id']]){
-                            this.logs[logs[i]['user_id']] = {};
-                            this.logs[logs[i]['user_id']]['user_id'] = logs[i]['user_id'];
-                        }
-                        if(logs[i]['type'] == 'arrival'){
-                            var d = new Date(logs[i]['time']);
-                            this.logs[logs[i]['user_id']]['arrival'] = d.toLocaleString();
-                        }
-                        else{
-                            var d = new Date(logs[i]['time']);
-                            this.logs[logs[i]['user_id']]['departure'] = d.toLocaleString();
-                        }
+                    this.logs = logs;
+                    var d = new Date();
+                    this.create.year = d.getYear() + 1900;
+                    this.create.month = d.getMonth() + 1;
+                    this.create.day = d.getDate();
+                    this.create.hour = d.getHours();
+                    this.create.minute = d.getMinutes();
+                    this.create.second = d.getSeconds();
+                },
+                watch : {
+                    sortby : function(){
+                        console.log(this.sortby)
+                        this.sort();
                     }
                 },
                 methods : {
+                    show_string : function(time){
+                        d = new Date(time);
+                        return d.toLocaleString();
+                    },
                     caculate : function(){
                         s = new Date(this.starttime.year, this.starttime.month-1, this.starttime.day, this.starttime.hour, this.starttime.minute, this.starttime.second);
                         start_time = s.getTime();
@@ -246,6 +314,40 @@
                         end_time = e.getTime();
                         console.log(start_time, end_time);
                         this.max = max_vistors(start_time, end_time);
+                    },
+                    add : function(){
+                        d = new Date(this.create.year, this.create.month-1, this.create.day, this.create.hour, this.create.minute, this.create.second);
+                        create_log(this.create.user_id, this.create.type, d.getTime());
+                    },
+                    deleteLog : function(){
+                        delete_log(this.del.user_id, this.del.type);
+                    },
+                    sort : function(){
+                        if(this.sortby == 'id'){
+                            logs.sort(function(a, b){
+                                return a.user_id - b.user_id;
+                            });
+                        }
+                        if(this.sortby == 'type'){
+                            logs.sort(function(a, b){
+                                var nameA = a.type.toUpperCase(); // ignore upper and lowercase
+                                var nameB = b.type.toUpperCase(); // ignore upper and lowercase
+                                if (nameA < nameB) {
+                                return -1;
+                                }
+                                if (nameA > nameB) {
+                                return 1;
+                                }
+
+                                // names must be equal
+                                return 0;
+                            });
+                        }
+                        if(this.sortby == 'time'){
+                            logs.sort(function(a, b){
+                                return a.time - b.time;
+                            });
+                        }
                     }
                 }
             });
