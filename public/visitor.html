@@ -236,9 +236,15 @@
 
                    return c;
                };
-
+               let max_flag = true;
                for(let i=0,imax=logs.length; i<imax; i++){
                    let l = logs[i];
+
+                   if(l.time > time_end && max_flag == true){
+                       num = _count();
+                       max = Math.max(max, num);
+                       max_flag = false;
+                   }
 
                    if(l.time <= time_start && l.type === 'departure'){
                        delete vistors_in_building[l.user_id];
