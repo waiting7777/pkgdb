@@ -171,6 +171,7 @@
                for(let i=0,imax=logs.length; i<imax; i++){
                     let l = logs[i];
 
+                    //之後的資料不會 影響ＭＡＸ了 結束迴圈
                     if( l.time > time_end ){
                         console.log('break')
                         break;
@@ -179,11 +180,11 @@
                     if( l.time >= time_start){
                          max = Math.max(max, _count() );
                     }
-
+                    // 離開大樓
                     if(l.type === 'departure'){
                          delete vistors_in_building[l.user_id];
                     }
-
+                    // 抵達大樓
                     if(l.type === 'arrival'){
                          vistors_in_building[l.user_id] = l.time;
                     }
