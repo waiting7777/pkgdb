@@ -236,31 +236,42 @@
 
                    return c;
                };
-               let max_flag = true;
+
                for(let i=0,imax=logs.length; i<imax; i++){
-                   let l = logs[i];
+                    let l = logs[i];
 
-                   if(l.time > time_end && max_flag == true){
-                       num = _count();
-                       max = Math.max(max, num);
-                       max_flag = false;
-                   }
+                    if( l.time > time_end ){
+                        console.log('break')
+                         break;
+                    }
 
-                   if(l.time <= time_start && l.type === 'departure'){
-                       delete vistors_in_building[l.user_id];
-                   }
 
-                   if(l.time <= time_end && l.type === 'arrival'){
-                       vistors_in_building[l.user_id] = l.time;
-                   }
+                    if(l.type === 'departure'){
+                         delete vistors_in_building[l.user_id];
+                    }
 
-                   if( l.time >= time_start && l.time <= time_end){
-                       num = _count();
-                       max = Math.max(max, num);
-                   }
-               }
 
-               return max;
+
+                    if(l.type === 'arrival'){
+                         vistors_in_building[l.user_id] = l.time;
+                    }
+
+
+
+                    if( l.time >= time_start){
+                         max = Math.max(max, _count() );
+                    }
+                    console.log(l.time)
+                    console.log(i, vistors_in_building)
+                    console.log('####' + max + '####')
+                }
+
+
+                if(max === 0 ){
+                    max = Math.max( max, _count() );
+                }
+
+                return max;
            }
 
             VM = new Vue({
