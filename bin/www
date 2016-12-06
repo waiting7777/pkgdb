@@ -8,8 +8,6 @@ var app = require('../app');
 var debug = require('debug')('pkgdb:server');
 var http = require('http');
 
-var ssl = require('../sslLicense');
-var https = require('https');
 
 /**
  * Get port from environment and store in Express.
@@ -17,14 +15,14 @@ var https = require('https');
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-app.set('httpsport', 80);
+
 
 /**
  * Create HTTP server.
  */
 
 var server = http.createServer(app);
-var httpsServer = https.createServer(ssl.options, app).listen(app.get('httpsport'));
+
 
 /**
  * Listen on provided port, on all network interfaces.

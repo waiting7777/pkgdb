@@ -5,6 +5,7 @@
         <title>Visitor</title>
 
         <script src="https://unpkg.com/vue@latest/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/vue.resource/1.0.3/vue-resource.min.js"></script>
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -145,76 +146,6 @@
             </div>
         </div>
         <script>
-            let logs=[{
-                user_id : 0,
-                type : 'arrival',
-                time : 1480910400000
-            },
-            {
-                user_id : 0,
-                type : 'departure',
-                time : 1480921200000
-            },
-            {
-                user_id : 1,
-                type : 'arrival',
-                time : 1480906800000
-            },
-            {
-                user_id : 1,
-                type : 'departure',
-                time : 1480924800000
-            },
-            {
-                user_id : 2,
-                type : 'arrival',
-                time : 1480914000000
-            },
-            {
-                user_id : 2,
-                type : 'departure',
-                time : 1480915800000
-            },
-            {
-                user_id : 3,
-                type : 'arrival',
-                time : 1480912200000
-            },
-            {
-                user_id : 3,
-                type : 'departure',
-                time : 1480926600000
-            },
-            {
-                user_id : 4,
-                type : 'arrival',
-                time : 1480899600000
-            },
-            {
-                user_id : 4,
-                type : 'departure',
-                time : 1480910400000
-            }];
-
-            function create_log(user_id, type, time){
-
-                logs.push({
-                    user_id:user_id,
-                    type:type,
-                    time:time
-                });
-
-            }
-
-            function delete_log(user_id, type){
-
-                for(var i in logs){
-                    if(logs[i]['user_id'] == user_id && logs[i]['type'] == type){
-                        logs.splice(i, 1);
-                    }
-                }
-
-            }
 
             function max_vistors(time_start, time_end){
 
@@ -242,7 +173,7 @@
 
                     if( l.time > time_end ){
                         console.log('break')
-                         break;
+                        break;
                     }
 
                     if( l.time >= time_start){
@@ -303,7 +234,11 @@
                     sortby : 'id'
                 },
                 created : function(){
-                    this.logs = logs;
+                    this.$http.get('/api/visitor').then((response) => {
+                        console.log(response.data)
+                        this.logs = response.data
+                        this.sort();
+                    });
                     var d = new Date();
                     this.create.year = d.getYear() + 1900;
                     this.create.month = d.getMonth() + 1;
@@ -329,38 +264,50 @@
                         e = new Date(this.endtime.year, this.endtime.month-1, this.endtime.day, this.endtime.hour, this.endtime.minute, this.endtime.second);
                         end_time = e.getTime();
                         console.log(start_time, end_time);
-                        this.max = max_vistors(start_time, end_time);
+                        this.$http.post('api/visitor/max', {start_time : start_time, end_time : end_time}).then((response) => {
+                            this.max = response.data;
+                        });
+                        // this.max = max_vistors(start_time, end_time);
                     },
                     add : function(){
                         d = new Date(this.create.year, this.create.month-1, this.create.day, this.create.hour, this.create.minute, this.create.second);
-                        create_log(this.create.user_id, this.create.type, d.getTime());
+                        this.$http.post('api/visitor/create', {user_id : this.create.user_id, type : this.create.type, time : d.getTime()}).then((response) => {
+                            this.$http.get('/api/visitor').then((response) => {
+                                console.log(response.data)
+                                this.logs = response.data
+                            });
+                        });
                     },
                     deleteLog : function(){
-                        delete_log(this.del.user_id, this.del.type);
+                        this.$http.post('api/visitor/delete', {user_id : this.del.user_id, type : this.del.type}).then((response) => {
+                            this.$http.get('/api/visitor').then((response) => {
+                                console.log(response.data)
+                                this.logs = response.data
+                            });
+                        });
                     },
                     sort : function(){
                         if(this.sortby == 'id'){
-                            logs.sort(function(a, b){
+                            this.logs.sort(function(a, b){
                                 return a.user_id - b.user_id;
                             });
                         }
                         if(this.sortby == 'type'){
-                            logs.sort(function(a, b){
+                            this.logs.sort(function(a, b){
                                 var nameA = a.type.toUpperCase(); // ignore upper and lowercase
                                 var nameB = b.type.toUpperCase(); // ignore upper and lowercase
                                 if (nameA < nameB) {
-                                return -1;
+                                    return -1;
                                 }
                                 if (nameA > nameB) {
-                                return 1;
+                                    return 1;
                                 }
-
                                 // names must be equal
                                 return 0;
                             });
                         }
                         if(this.sortby == 'time'){
-                            logs.sort(function(a, b){
+                            this.logs.sort(function(a, b){
                                 return a.time - b.time;
                             });
                         }
