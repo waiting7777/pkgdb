@@ -31,15 +31,6 @@
                 <div class="col-md-12" id="vistor-stat">
                     <br>
                     <p>訪客記錄</p>
-                    <div>Sort : </div>
-                    <input type="radio" id="by-id" value="id" v-model="sortby">
-                    <label for="by-id">by id</label>
-                    <br>
-                    <input type="radio" id="by-type" value="type" v-model="sortby">
-                    <label for="by-type">by type</label>
-                    <br>
-                    <input type="radio" id="by-time" value="time" v-model="sortby">
-                    <label for="by-time">by time</label>
                     <table class="table table-bordered table-hover table-striped">
                         <thead>
                             <tr>
@@ -56,6 +47,15 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div>Sort : </div>
+                    <input type="radio" id="by-id" value="id" v-model="sortby">
+                    <label for="by-id">by id</label>
+                    <br>
+                    <input type="radio" id="by-type" value="type" v-model="sortby">
+                    <label for="by-type">by type</label>
+                    <br>
+                    <input type="radio" id="by-time" value="time" v-model="sortby">
+                    <label for="by-time">by time</label>
                 </div>
                 <div class="col-md-12">
                     <br>
